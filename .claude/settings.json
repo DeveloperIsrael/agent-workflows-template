@@ -1,0 +1,58 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(pnpm run *)",
+            "Bash(pnpm install *)",
+            "Bash(pnpm add *)",
+            "Bash(pnpm remove *)",
+            "Bash(pnpm exec *)",
+            "Bash(npm run *)",
+            "Bash(npm install *)",
+            "Bash(npm add *)",
+            "Bash(npm remove *)",
+            "Bash(npm exec *)",
+            "Bash(yarn *)",
+            "Bash(git *)",
+            "Bash(gh *)",
+            "Bash(ls *)",
+            "Bash(cat *)",
+            "Bash(head *)",
+            "Bash(tail *)",
+            "Bash(wc *)",
+            "Bash(find *)",
+            "Bash(grep *)",
+            "Bash(rg *)",
+            "Bash(tree *)",
+            "Bash(mkdir *)",
+            "Bash(touch *)",
+            "Bash(cp *)",
+            "Bash(mv *)",
+            "Bash(echo *)",
+            "Read(**)",
+            "Edit(**)",
+            "Write(**)",
+            "Glob(**)",
+            "Grep(**)"
+        ],
+        "deny": [
+            "Read(.env)",
+            "Read(.env.*)",
+            "Read(.env.local)",
+            "Read(.env.development.local)",
+            "Read(.env.test.local)",
+            "Read(.env.production.local)",
+            "Read(secrets/**)",
+            "Read(**/*.key)",
+            "Read(**/*.pem)",
+            "Read(.mcp.json)",
+            "Read(node_modules/**)",
+            "Bash(rm -rf *)",
+            "Bash(rm -r *)",
+            "Bash(curl *)",
+            "Bash(wget *)"
+        ]
+    },
+    "env": {
+        "NODE_ENV": "development"
+    }
+}

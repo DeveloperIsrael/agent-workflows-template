@@ -1,0 +1,20 @@
+# Claude Code Local Scope
+# Arquivos com padrão *.local.* são pessoais e nunca devem ser commitados
+
+# Local settings (conforme docs oficiais)
+settings.local.json
+
+# Outros arquivos locais
+*.local.*
+**/local/**
+user-preferences.local.md
+local-workflows.local.md
+personal-notes.local.md
+
+# Logs e temporários
+*.log
+.DS_Store
+
+# Arquivos antigos (substituídos)
+.claude.json
+.mcp.json
