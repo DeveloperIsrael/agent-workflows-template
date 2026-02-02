@@ -1,0 +1,39 @@
+---
+description: TypeScript specific rules
+globs: **/*.ts, **/*.tsx
+alwaysApply: false
+---
+
+# TypeScript Rules
+
+## Type Safety
+- Enable strict mode in tsconfig.json
+- Never use `any` - prefer `unknown`
+- Define interfaces for all data structures
+- Use type guards for runtime checks
+
+## Interfaces vs Types
+- Use `interface` for object shapes
+- Use `type` for unions, intersections, primitives
+
+## Examples
+
+### Good
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+function getUser(id: string): Promise<User | null> {
+  // ...
+}
+```
+
+### Bad
+```typescript
+function getUser(id: any): any {
+  // NO!
+}
+```

@@ -1,0 +1,22 @@
+# Codex CLI Configuration
+# Docs: https://developers.openai.com/codex/config-reference/
+
+# Model to use
+model = "gpt-5-codex"
+
+# Approval policy: "on-request", "unless-allow-listed", "never"
+approval_policy = "on-request"
+
+# Sandbox mode: "workspace-write", "danger-full-access"
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+# Enable network access when needed
+network_access = false
+
+# MCP Servers (optional)
+# [mcp_servers.github]
+# command = "npx"
+# args = ["-y", "@modelcontextprotocol/server-github"]
+# [mcp_servers.github.env]
+# GITHUB_TOKEN = "${GITHUB_TOKEN}"

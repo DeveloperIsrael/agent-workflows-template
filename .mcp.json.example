@@ -1,0 +1,44 @@
+{
+  "_comment": "Renomeie para .mcp.json e configure seus MCPs",
+  "_docs": "Este arquivo configura MCPs para Claude Code. Fica na RAIZ do projeto.",
+
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "_comment": "Acesso ao sistema de arquivos"
+    },
+
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "_comment": "Raciocinio complexo passo a passo"
+    },
+
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@anthropics/mcp-server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "_comment": "Busca na web via Brave"
+    },
+
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}"
+      },
+      "_comment": "Acesso a banco PostgreSQL"
+    }
+  }
+}

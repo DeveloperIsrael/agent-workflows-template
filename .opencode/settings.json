@@ -1,0 +1,33 @@
+{
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-20250514",
+  "temperature": 0.7,
+
+  "permissions": {
+    "allow": [
+      "bash:npm *",
+      "bash:pnpm *",
+      "bash:git *",
+      "bash:gh *",
+      "read:**",
+      "write:**"
+    ],
+    "deny": [
+      "read:.env*",
+      "read:secrets/**",
+      "bash:rm -rf *",
+      "bash:curl *"
+    ]
+  },
+
+  "context": {
+    "maxFiles": 50,
+    "maxTokens": 100000,
+    "include": ["src/**", "*.json", "*.md"],
+    "exclude": ["node_modules/**", "dist/**", ".git/**"]
+  },
+
+  "mcpServers": {
+    "_comment": "Adicione seus MCPs aqui"
+  }
+}

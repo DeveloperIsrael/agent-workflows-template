@@ -1,0 +1,32 @@
+---
+description: Project-wide coding rules
+globs: **/*
+alwaysApply: true
+---
+
+# Project Rules - [NOME_DO_PROJETO]
+
+## Stack
+- [FRAMEWORK] (ex: React 18, Vue 3, Next.js)
+- [LINGUAGEM] (ex: TypeScript strict)
+- [STYLING] (ex: Tailwind CSS)
+
+## Code Style
+- Use functional components/composition
+- Follow SOLID principles
+- No `any` types - use `unknown` if needed
+
+## Naming Conventions
+- Components: PascalCase (`UserProfile.tsx`)
+- Hooks: camelCase with `use` prefix (`useAuth.ts`)
+- Utils: camelCase (`formatDate.ts`)
+
+## DO NOT
+- Use `any` type
+- Use inline styles
+- Commit console.log
+- Create files > 500 lines
+
+## References
+- `context/00-overview.md` - Project overview
+- `.agent/rules/01-architecture.md` - Architecture rules

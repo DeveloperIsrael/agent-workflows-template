@@ -41,16 +41,28 @@ Este template fornece uma estrutura padronizada para:
 │   └── settings.json           # Configuracoes do Gemini
 │
 ├── .cursor/                    # Configuracoes Cursor
-│   └── settings.json           # Configuracoes do Cursor
+│   ├── settings.json           # Configuracoes do Cursor
+│   └── rules/*.mdc             # Rules no novo formato MDC
 │
-├── .codex/                     # Configuracoes Codex
-│   └── settings.json           # Configuracoes do Codex
+├── .codex/                     # Configuracoes Codex (OpenAI)
+│   └── config.toml             # Configuracoes do Codex (TOML!)
 │
 ├── .opencode/                  # Configuracoes OpenCode
 │   └── settings.json           # Configuracoes do OpenCode
 │
-├── .github/                    # GitHub Actions e templates
-│   └── ...
+├── .github/                    # GitHub Copilot e Actions
+│   └── copilot-instructions.md # Instrucoes do Copilot
+│
+├── .mcp.json.example           # Template de MCPs (renomear para .mcp.json)
+│
+├── context/providers/          # Documentacao de configuracao por ferramenta
+│   ├── 00-overview.md          # Visao geral dos providers
+│   ├── claude.md               # Guia Claude Code
+│   ├── gemini.md               # Guia Gemini CLI
+│   ├── cursor.md               # Guia Cursor IDE
+│   ├── codex.md                # Guia Codex CLI
+│   ├── opencode.md             # Guia OpenCode
+│   └── github-copilot.md       # Guia GitHub Copilot
 │
 └── .agents/                    # Skills compartilhados (opcional)
     └── skills/                 # Skills instalados
@@ -94,11 +106,25 @@ Edite os arquivos em `.agent/`:
 
 ### 4. Configure as Ferramentas
 
-Ajuste os arquivos de configuracao por ferramenta:
+Ajuste os arquivos de configuracao por ferramenta (veja `context/providers/` para detalhes):
 
-- **`.claude/settings.json`** - Permissoes de comandos
-- **`.gemini/settings.json`** - Configuracoes do Gemini
-- **`.cursor/settings.json`** - Rules e comportamentos
+| Ferramenta | Arquivo | Formato |
+|------------|---------|---------|
+| Claude Code | `.claude/settings.json` | JSON |
+| Gemini | `.gemini/settings.json` | JSON |
+| Cursor | `.cursor/rules/*.mdc` | MDC (Markdown + YAML) |
+| Codex | `.codex/config.toml` | TOML |
+| OpenCode | `.opencode/settings.json` | JSON |
+| Copilot | `.github/copilot-instructions.md` | Markdown |
+
+### 5. Configure MCPs (opcional)
+
+Para usar MCP servers com Claude Code:
+
+```bash
+cp .mcp.json.example .mcp.json
+# Edite .mcp.json com suas configuracoes
+```
 
 ---
 
@@ -121,16 +147,20 @@ Ajuste os arquivos de configuracao por ferramenta:
 
 ---
 
-## Arquivos Entry Point por Ferramenta
+## Configuracao por Ferramenta
 
-Cada ferramenta tem seu arquivo de entrada que deve referenciar os docs relevantes:
+Cada ferramenta tem sua estrutura de configuracao. Veja detalhes em `context/providers/`.
 
-| Ferramenta | Entry Point | Descricao |
-|------------|-------------|-----------|
-| Claude Code | `CLAUDE.md` | Instrucoes e contexto para Claude |
-| Gemini | `GEMINI.md` | Instrucoes e contexto para Gemini |
-| Cursor | `.cursorrules` | Rules do Cursor |
-| GitHub Copilot | `.github/copilot-instructions.md` | Instrucoes do Copilot |
+| Ferramenta | Entry Point | Config | MCPs |
+|------------|-------------|--------|------|
+| Claude Code | `CLAUDE.md` | `.claude/settings.json` | `.mcp.json` (raiz) |
+| Gemini | `GEMINI.md` | `.gemini/settings.json` | Dentro do settings |
+| Cursor | `.cursor/rules/*.mdc` | `.cursor/settings.json` | Via settings |
+| Codex (OpenAI) | - | `.codex/config.toml` | Via config |
+| OpenCode | - | `.opencode/settings.json` | Via config |
+| GitHub Copilot | `.github/copilot-instructions.md` | VS Code settings | N/A |
+
+> **Nota**: Consulte `context/providers/` para guias detalhados de cada ferramenta.
 
 ---
 
@@ -146,4 +176,4 @@ Cada ferramenta tem seu arquivo de entrada que deve referenciar os docs relevant
 
 ## Licenca
 
-MIT License - veja [LICENSE](LICENSE) para detalhes.
+CC BY 4.0 - veja [LICENSE](LICENSE) para detalhes.

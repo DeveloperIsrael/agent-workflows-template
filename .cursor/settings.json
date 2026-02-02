@@ -1,0 +1,12 @@
+{
+  "cursor.general.enableShadowWorkspace": true,
+  "cursor.chat.showSuggestedFiles": true,
+  "cursor.composer.enabled": true,
+  "cursor.composer.autoSave": true,
+
+  "files.exclude": {
+    "node_modules": true,
+    ".git": true,
+    "dist": true
+  }
+}
