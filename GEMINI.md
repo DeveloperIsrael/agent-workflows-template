@@ -91,5 +91,38 @@ Ao iniciar uma task, leia na ordem:
 
 ---
 
+## Skills Disponiveis
+
+Skills instaladas em `.agents/skills/` com symlinks nos providers suportados:
+
+| Skill | Quando usar |
+|-------|------------|
+| `clean-architecture` | Arquitetura em camadas, boundaries, use cases |
+| `clean-code` | Nomenclatura, funcoes, comentarios, erros |
+| `solid-principles` | SOLID, TDD, design patterns, code smells |
+| `ai-agents-architect` | Design de agentes, tool use, orquestracao |
+| `git-commit` | Gerar mensagens de commit (Conventional Commits) |
+| `clean-code-principles` | DRY, KISS, YAGNI, SOLID |
+| `coding-standards` | Padroes universais TS/JS/React/Node |
+| `typescript-best-practices` | Tipos avancados, illegal states, exhaustive handling |
+| `vercel-react-best-practices` | Performance React/Next.js |
+| `find-skills` | Descobrir e instalar novas skills |
+| `frontend-design` | Componentes UI de alta qualidade |
+
+### Instalando novas skills
+
+```bash
+# Instalar skill no projeto (sem -g) para os providers suportados:
+# claude, gemini, github, cursor, codex, opencode
+npx skills add <owner/repo@skill-name> -y
+
+# Providers suportados neste template:
+# .claude/ .gemini/ .github/ .cursor/ .codex/ .opencode/ .agent/ .agents/
+```
+
+> Apos instalar, remover quaisquer diretorios de providers nao listados acima.
+
+---
+
 **Versao**: 1.0.0
 **Filosofia**: DRY - Uma unica fonte de verdade para cada aspecto

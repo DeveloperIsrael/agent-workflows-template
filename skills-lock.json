@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "skills": {
+    "ai-agents-architect": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "2d9db65b198f21f1d962a0a49d9a500bca164997e680d34dd0809e139784c7f7"
+    },
+    "clean-architecture": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "computedHash": "613e3421174049dfb4a528c072cafb5e805322a6d9e1522ec9b74077e07947d7"
+    },
+    "clean-code": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "af77b8995f255140f1643de753007baf87b734e8b87175489524aadc3559c42a"
+    },
+    "git-commit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+    },
+    "solid-principles": {
+      "source": "thebushidocollective/han",
+      "sourceType": "github",
+      "computedHash": "302fc51ca42b1a002d100f4a344c5ffeeb7a46afb1bd54cf1c18ada7cb932577"
+    }
+  }
+}
