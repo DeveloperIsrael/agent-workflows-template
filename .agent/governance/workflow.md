@@ -179,4 +179,5 @@ refactor(api): extrai logica de validacao
 ## Referencias
 
 - [.agent/rules/01-architecture.md](../rules/01-architecture.md) - Padroes de codigo
-- [context/04-engineering.md](../../context/04-engineering.md) - Arquitetura do projeto
+- [context/architecture/engineering.md](../../context/architecture/engineering.md) - Arquitetura do projeto
+- [context/adr/README.md](../../context/adr/README.md) - Decisoes arquiteturais

@@ -1,81 +1,86 @@
-# [NOME_DO_PROJETO] - Claude Code Entry Point
+# [NOME_DO_PROJETO] — Entry Point Canonico para Agentes
 
-> **Entry Point para Claude Code** - Substitua `[NOME_DO_PROJETO]` pelo nome do seu projeto.
+> **Este e o documento canonico para todos os agentes** (Claude, Gemini, Codex, Copilot, Cursor, OpenCode).
+> `GEMINI.md` e `AGENTS.md` sao stubs que apontam para aqui.
+>
+> Substitua `[NOME_DO_PROJETO]` e demais placeholders `[TEXTO]` ao adotar o template.
 
 ---
 
 ## Leitura Obrigatoria
 
-Ao iniciar uma task, leia na ordem:
+Ao iniciar uma task, leia nesta ordem:
 
-1. **Workflow de Desenvolvimento**:
-   - [`.agent/governance/workflow.md`](./.agent/governance/workflow.md)
-
-2. **Padroes de Codigo**:
-   - [`.agent/rules/01-architecture.md`](./.agent/rules/01-architecture.md)
-
-3. **Contexto do Dominio**:
-   - [`context/00-overview.md`](./context/00-overview.md)
+1. **Workflow de desenvolvimento** — [`.agent/governance/workflow.md`](./.agent/governance/workflow.md)
+2. **Regras de codigo** — [`.agent/rules/`](./.agent/rules/) (ler todas as rules ativas)
+3. **Contexto do dominio** — [`context/README.md`](./context/README.md)
+4. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
 
 ---
 
-## TL;DR - Regras Criticas
+## TL;DR — Regras Criticas
 
 ### Workflow
-- **Task First**: Crie task ANTES de modificar codigo
+- **Task first**: abra task/issue ANTES de modificar codigo
 - **Branch**: `feature/[TASK-ID]-nome` ou `fix/[TASK-ID]-nome`
-- **Commits**: Atomicos, com mensagens descritivas
-- **PR**: Sempre com descricao clara e criterios de teste
+- **Commits**: atomicos, mensagens descritivas (Conventional Commits)
+- **PR**: descricao clara + criterios de teste
 
 ### Qualidade de Codigo
-- Seguir padroes definidos em `.agent/rules/`
+- Seguir [`.agent/rules/`](./.agent/rules/)
 - Documentar funcoes publicas
 - Tratar erros adequadamente
-- Manter arquivos pequenos e focados
+- Arquivos pequenos e focados
+
+### Documentacao (OBRIGATORIO)
+Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
+- Nova feature / endpoint / schema → `context/` correspondente
+- Decisao arquitetural relevante → novo ADR em `context/adr/`
+- Mudanca de stack / dependencia → `context/architecture/engineering.md`
 
 ### Anti-Patterns (NUNCA FACA)
 1. Modificar codigo sem task criada
 2. Commits com codigo de debug
 3. Ignorar erros de linting/tipos
-4. Arquivos muito grandes (>500 linhas)
+4. Arquivos muito grandes (> [LIMITE_LINHAS, ex. 500])
 5. Logica de negocio em componentes UI
 
 ---
 
-## Estrutura de Documentacao
+## Estrutura do Repositorio
 
 ```
 [PROJETO]/
-├── CLAUDE.md                              # Este arquivo (entry point Claude Code)
-├── GEMINI.md                              # Entry point Gemini
-├── README.md                              # Para humanos (setup, stack)
+├── CLAUDE.md                    # Entry point canonico (este arquivo)
+├── GEMINI.md                    # Stub -> CLAUDE.md
+├── AGENTS.md                    # Stub -> CLAUDE.md (Codex/OpenCode convention)
+├── README.md                    # Para humanos (setup, stack)
 │
-├── .agent/
-│   ├── governance/
-│   │   └── workflow.md                    # Workflow de desenvolvimento
-│   ├── rules/
-│   │   └── 01-architecture.md             # Padroes de arquitetura
-│   └── skills/                            # Skills de agentes
+├── .agent/                      # Governance + rules (cross-provider)
+│   ├── governance/workflow.md
+│   ├── rules/                   # 01-architecture.md, 02-*.md, ...
+│   └── skills/                  # Symlinks -> .agents/skills/
 │
-├── context/                               # Documentacao de dominio
-│   ├── 00-overview.md                     # Indice e visao geral
-│   ├── 01-product-prd.md                  # PRD
-│   ├── 02-business-rules.md               # Regras de negocio
-│   ├── 03-data-model.md                   # Modelo de dados
-│   ├── 04-engineering.md                  # Arquitetura tecnica
-│   ├── 05-dictionary.md                   # Glossario de termos
-│   ├── 06-user-guide.md                   # Fluxos de UI
-│   └── 07-technical-specs.md              # Specs tecnicas
+├── .agents/                     # SSoT das skills instaladas
+│   └── skills/
 │
-└── .claude/
-    └── settings.json                      # Permissoes
+├── context/                     # Documentacao de dominio (ver context/README.md)
+│   ├── product/
+│   ├── architecture/
+│   ├── domain/
+│   ├── guides/
+│   ├── adr/
+│   └── providers/
+│
+└── .claude/ .gemini/ .cursor/ .codex/ .opencode/ .github/
+    # Configuracoes especificas por provedor
 ```
 
 ---
 
-## MCPs Configurados (Opcional)
+## MCPs Configurados
 
-> Liste os MCPs configurados no seu projeto, se houver.
+> Liste os MCPs ativos em [`.mcp.json`](./.mcp.json) (exemplo em [`.mcp.json.example`](./.mcp.json.example)).
 
 | MCP | Proposito |
 |-----|-----------|
@@ -104,36 +109,34 @@ Ao iniciar uma task, leia na ordem:
 
 ## Skills Disponiveis
 
-Skills instaladas em `.agents/skills/` com symlinks nos providers suportados:
+Skills vivem em `.agents/skills/` e sao expostas via symlink para cada provider (`.claude/skills/`, `.gemini/skills/`, etc.). Fonte unica de verdade — sem duplicacao.
+
+Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes exatas):
 
 | Skill | Quando usar |
-|-------|------------|
-| `clean-architecture` | Arquitetura em camadas, boundaries, use cases |
+|-------|-------------|
+| `clean-architecture` | Camadas, boundaries, use cases |
 | `clean-code` | Nomenclatura, funcoes, comentarios, erros |
-| `solid-principles` | SOLID, TDD, design patterns, code smells |
-| `ai-agents-architect` | Design de agentes, tool use, orquestracao |
-| `git-commit` | Gerar mensagens de commit (Conventional Commits) |
 | `clean-code-principles` | DRY, KISS, YAGNI, SOLID |
+| `solid-principles` | SOLID, TDD, design patterns, code smells |
 | `coding-standards` | Padroes universais TS/JS/React/Node |
 | `typescript-best-practices` | Tipos avancados, illegal states, exhaustive handling |
 | `vercel-react-best-practices` | Performance React/Next.js |
-| `find-skills` | Descobrir e instalar novas skills |
 | `frontend-design` | Componentes UI de alta qualidade |
+| `ai-agents-architect` | Design de agentes, tool use, orquestracao |
+| `git-commit` | Mensagens de commit (Conventional Commits) |
+| `find-skills` | Descobrir e instalar novas skills |
 
 ### Instalando novas skills
 
 ```bash
-# Instalar skill no projeto (sem -g) para os providers suportados:
-# claude, gemini, github, cursor, codex, opencode
+# Instala nos providers suportados (claude, gemini, github, cursor, codex, opencode)
 npx skills add <owner/repo@skill-name> -y
-
-# Providers suportados neste template:
-# .claude/ .gemini/ .github/ .cursor/ .codex/ .opencode/ .agent/ .agents/
 ```
 
-> Apos instalar, remover quaisquer diretorios de providers nao listados acima.
+> Apos instalar, remova diretorios de providers nao suportados neste template.
 
 ---
 
-**Versao**: 1.0.0
-**Filosofia**: DRY - Uma unica fonte de verdade para cada aspecto
+**Versao do template**: 2.0.0
+**Filosofia**: DRY — uma unica fonte de verdade para cada aspecto

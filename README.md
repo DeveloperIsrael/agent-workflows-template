@@ -18,54 +18,50 @@ Este template fornece uma estrutura padronizada para:
 
 ```
 .
-├── context/                    # Documentacao de contexto do projeto
-│   ├── 00-overview.md          # Indice e guia de leitura
-│   ├── 01-product-prd.md       # Product Requirements Document
-│   ├── 02-business-rules.md    # Regras de negocio
-│   ├── 03-data-model.md        # Modelo de dados
-│   ├── 04-engineering.md       # Arquitetura tecnica e ADRs
-│   ├── 05-dictionary.md        # Dicionario de entidades
-│   ├── 06-user-guide.md        # Guia de uso/fluxos de UI
-│   └── 07-technical-specs.md   # Especificacoes tecnicas adicionais
+├── CLAUDE.md                   # Entry point CANONICO para agentes
+├── GEMINI.md                   # Stub -> CLAUDE.md
+├── AGENTS.md                   # Stub -> CLAUDE.md (Codex/OpenCode)
+├── README.md                   # Este arquivo (para humanos)
 │
-├── .agent/                     # Regras e governanca (agnóstico de ferramenta)
-│   ├── governance/             # Workflows e processos
-│   │   └── workflow.md         # Workflow de desenvolvimento
-│   └── rules/                  # Regras de codigo
-│       └── 01-architecture.md  # Padroes de arquitetura
+├── context/                    # Documentacao de contexto (semantica por pasta)
+│   ├── README.md               # Indice e guia de leitura
+│   ├── product/                # PRD, regras de negocio
+│   │   ├── prd.md
+│   │   └── business-rules.md
+│   ├── architecture/           # Stack, engenharia, specs tecnicas
+│   │   ├── engineering.md
+│   │   └── technical-specs.md
+│   ├── domain/                 # Modelo de dados e glossario
+│   │   ├── data-model.md
+│   │   └── glossary.md
+│   ├── guides/                 # Guias de uso e onboarding
+│   │   └── user-guide.md
+│   ├── adr/                    # Architecture Decision Records
+│   │   ├── README.md           # Convencao + indice
+│   │   └── _template.md        # Template de ADR
+│   ├── quality/                # Metricas, cobertura (slot vazio)
+│   ├── history/                # Roadmaps e analises passadas
+│   ├── archive/                # Docs substituidos
+│   └── providers/              # Guias por provedor de AI
+│
+├── .agent/                     # Regras e governanca (cross-provider)
+│   ├── governance/workflow.md
+│   ├── rules/
+│   │   ├── README.md           # Convencao de rules
+│   │   └── 01-architecture.md  # Padroes de arquitetura
+│   └── skills/                 # Symlinks -> .agents/skills/
+│
+├── .agents/                    # SSoT de skills instaladas
+│   └── skills/
 │
 ├── .claude/                    # Configuracoes Claude Code
-│   └── settings.json           # Permissoes e ambiente
-│
 ├── .gemini/                    # Configuracoes Gemini
-│   └── settings.json           # Configuracoes do Gemini
-│
 ├── .cursor/                    # Configuracoes Cursor
-│   ├── settings.json           # Configuracoes do Cursor
-│   └── rules/*.mdc             # Rules no novo formato MDC
-│
 ├── .codex/                     # Configuracoes Codex (OpenAI)
-│   └── config.toml             # Configuracoes do Codex (TOML!)
-│
 ├── .opencode/                  # Configuracoes OpenCode
-│   └── settings.json           # Configuracoes do OpenCode
+├── .github/                    # Configuracoes GitHub Copilot
 │
-├── .github/                    # GitHub Copilot e Actions
-│   └── copilot-instructions.md # Instrucoes do Copilot
-│
-├── .mcp.json.example           # Template de MCPs (renomear para .mcp.json)
-│
-├── context/providers/          # Documentacao de configuracao por ferramenta
-│   ├── 00-overview.md          # Visao geral dos providers
-│   ├── claude.md               # Guia Claude Code
-│   ├── gemini.md               # Guia Gemini CLI
-│   ├── cursor.md               # Guia Cursor IDE
-│   ├── codex.md                # Guia Codex CLI
-│   ├── opencode.md             # Guia OpenCode
-│   └── github-copilot.md       # Guia GitHub Copilot
-│
-└── .agents/                    # Skills compartilhados (opcional)
-    └── skills/                 # Skills instalados
+└── .mcp.json.example           # Template de MCPs (renomear para .mcp.json)
 ```
 
 ---
@@ -84,18 +80,19 @@ cp -r agent-workflows-template/ meu-projeto/
 
 ### 2. Preencha a Documentacao de Contexto
 
-Siga a ordem dos arquivos em `context/`:
+Preencha os arquivos em `context/`:
 
 | Arquivo | O que preencher | Quem deve preencher |
 |---------|-----------------|---------------------|
-| `00-overview.md` | Nome do projeto, links para outros docs | Tech Lead / PM |
-| `01-product-prd.md` | Visao, problema, solucao, escopo | Product Manager |
-| `02-business-rules.md` | Regras de negocio e validacoes | PM + Devs |
-| `03-data-model.md` | Entidades, schemas, relacionamentos | Arquiteto / Senior Dev |
-| `04-engineering.md` | Stack, ADRs, estrutura de pastas | Tech Lead |
-| `05-dictionary.md` | Glossario de termos e entidades | Time todo |
-| `06-user-guide.md` | Fluxos de usuario, UI/UX | Designer / PM |
-| `07-technical-specs.md` | Specs tecnicas especificas | Senior Devs |
+| `README.md` | Nome do projeto, links para outros docs | Tech Lead / PM |
+| `product/prd.md` | Visao, problema, solucao, escopo | Product Manager |
+| `product/business-rules.md` | Regras de negocio e validacoes | PM + Devs |
+| `domain/data-model.md` | Entidades, schemas, relacionamentos | Arquiteto / Senior Dev |
+| `architecture/engineering.md` | Stack, estrutura de pastas | Tech Lead |
+| `architecture/technical-specs.md` | Specs tecnicas especificas | Senior Devs |
+| `domain/glossary.md` | Glossario de termos e entidades | Time todo |
+| `guides/user-guide.md` | Fluxos de usuario, UI/UX | Designer / PM |
+| `adr/*.md` | Decisoes arquiteturais relevantes | Tech Lead |
 
 ### 3. Configure as Regras do Agente
 
@@ -132,18 +129,19 @@ cp .mcp.json.example .mcp.json
 
 | Perfil | Caminho de Leitura | Objetivo |
 |--------|-------------------|----------|
-| **Novo no Projeto** | `00-overview` → `01-product-prd` → `04-engineering` | Entender visao e arquitetura |
-| **Desenvolvedor** | `03-data-model` → `05-dictionary` → `02-business-rules` | Implementar features |
-| **LLM/Agente** | `CLAUDE.md` ou `GEMINI.md` → `.agent/governance/` | Executar tarefas |
+| **Novo no Projeto** | `context/README` → `product/prd` → `architecture/engineering` | Entender visao e arquitetura |
+| **Desenvolvedor** | `domain/data-model` → `domain/glossary` → `product/business-rules` → `adr/` | Implementar features |
+| **LLM/Agente** | `CLAUDE.md` → `.agent/governance/` → `.agent/rules/` → `context/README` | Executar tarefas |
 
 ---
 
 ## Regras de Ouro
 
 1. **Single Source of Truth (SSoT)**: Cada conceito tem um unico lugar canonico. Outros arquivos apenas referenciam.
-2. **Terminologia Consistente**: Defina termos no `05-dictionary.md` e use-os consistentemente.
+2. **Terminologia Consistente**: Defina termos em `context/domain/glossary.md` e use-os consistentemente.
 3. **Documentacao Viva**: Atualize os docs junto com o codigo.
-4. **Agentes como Primeira Classe**: Escreva documentacao pensando que um LLM vai ler.
+4. **ADRs para decisoes**: registre decisoes arquiteturais em `context/adr/` antes de implementar.
+5. **Agentes como Primeira Classe**: escreva documentacao pensando que um LLM vai ler — por isso `CLAUDE.md` e canonico e outros entry points sao stubs.
 
 ---
 
@@ -153,11 +151,11 @@ Cada ferramenta tem sua estrutura de configuracao. Veja detalhes em `context/pro
 
 | Ferramenta | Entry Point | Config | MCPs |
 |------------|-------------|--------|------|
-| Claude Code | `CLAUDE.md` | `.claude/settings.json` | `.mcp.json` (raiz) |
-| Gemini | `GEMINI.md` | `.gemini/settings.json` | Dentro do settings |
+| Claude Code | `CLAUDE.md` (canonico) | `.claude/settings.json` | `.mcp.json` (raiz) |
+| Gemini | `GEMINI.md` (stub) | `.gemini/settings.json` | Dentro do settings |
 | Cursor | `.cursor/rules/*.mdc` | `.cursor/settings.json` | Via settings |
-| Codex (OpenAI) | - | `.codex/config.toml` | Via config |
-| OpenCode | - | `.opencode/settings.json` | Via config |
+| Codex (OpenAI) | `AGENTS.md` (stub) | `.codex/config.toml` | Via config |
+| OpenCode | `AGENTS.md` (stub) | `.opencode/settings.json` | Via config |
 | GitHub Copilot | `.github/copilot-instructions.md` | VS Code settings | N/A |
 
 > **Nota**: Consulte `context/providers/` para guias detalhados de cada ferramenta.

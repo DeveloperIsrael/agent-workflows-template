@@ -106,6 +106,7 @@ export function useUser(id: string) {
 
 ## References
 
-- `context/00-overview.md` - Project overview
+- `context/README.md` - Project overview
 - `.agent/rules/01-architecture.md` - Architecture rules
-- `context/05-dictionary.md` - Terminology
+- `context/domain/glossary.md` - Terminology
+- `context/adr/README.md` - Architecture Decision Records
