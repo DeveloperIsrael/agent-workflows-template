@@ -5,14 +5,16 @@
 >
 > Substitua `[NOME_DO_PROJETO]` e demais placeholders `[TEXTO]` ao adotar o template.
 
+> **AVISO PARA AGENTES** — este repositorio **é um template** (`agent-workflows-template`). Tudo dentro de `.agents/`, `.claude/`, `.cursor/`, `.gemini/`, etc. existe para ser **herdado por projetos clonados a partir deste template**. NAO remova skills, regras, ou configuracoes daqui sob argumento de "duplicacao com setup global do usuario" — a duplicacao **e intencional**: o template precisa funcionar de forma standalone para quem clona. Mudancas aqui afetam todos os projetos futuros.
+
 ---
 
 ## Leitura Obrigatoria
 
 Ao iniciar uma task, leia nesta ordem:
 
-1. **Workflow de desenvolvimento** — [`.agent/governance/workflow.md`](./.agent/governance/workflow.md)
-2. **Regras de codigo** — [`.agent/rules/`](./.agent/rules/) (ler todas as rules ativas)
+1. **Workflow de desenvolvimento** — [`.agents/governance/workflow.md`](./.agents/governance/workflow.md)
+2. **Regras de codigo** — [`.agents/rules/`](./.agents/rules/) (`01-architecture.md`, `02-pdi.md`, `03-testing.md`)
 3. **Contexto do dominio** — [`context/README.md`](./context/README.md)
 4. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
 
@@ -27,7 +29,7 @@ Ao iniciar uma task, leia nesta ordem:
 - **PR**: descricao clara + criterios de teste
 
 ### Qualidade de Codigo
-- Seguir [`.agent/rules/`](./.agent/rules/)
+- Seguir [`.agents/rules/`](./.agents/rules/)
 - Documentar funcoes publicas
 - Tratar erros adequadamente
 - Arquivos pequenos e focados
@@ -49,32 +51,13 @@ Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
 
 ## Estrutura do Repositorio
 
-```
-[PROJETO]/
-├── CLAUDE.md                    # Entry point canonico (este arquivo)
-├── GEMINI.md                    # Stub -> CLAUDE.md
-├── AGENTS.md                    # Stub -> CLAUDE.md (Codex/OpenCode convention)
-├── README.md                    # Para humanos (setup, stack)
-│
-├── .agent/                      # Governance + rules (cross-provider)
-│   ├── governance/workflow.md
-│   ├── rules/                   # 01-architecture.md, 02-*.md, ...
-│   └── skills/                  # Symlinks -> .agents/skills/
-│
-├── .agents/                     # SSoT das skills instaladas
-│   └── skills/
-│
-├── context/                     # Documentacao de dominio (ver context/README.md)
-│   ├── product/
-│   ├── architecture/
-│   ├── domain/
-│   ├── guides/
-│   ├── adr/
-│   └── providers/
-│
-└── .claude/ .gemini/ .cursor/ .codex/ .opencode/ .github/
-    # Configuracoes especificas por provedor
-```
+> Arvore completa em [`README.md`](./README.md#estrutura-de-pastas). O agente em runtime precisa conhecer apenas:
+
+- [`.agents/governance/`](./.agents/governance/) — workflow de desenvolvimento
+- [`.agents/rules/`](./.agents/rules/) — regras de codigo (arquitetura, PDI, testes)
+- [`.agents/skills/`](./.agents/skills/) — skills instaladas (SSoT, expostas via symlink em cada provider)
+- [`context/`](./context/) — documentacao de dominio (PRD, arquitetura, ADRs, glossario)
+- [`.mcp.json`](./.mcp.json) — MCPs configurados
 
 ---
 
@@ -111,7 +94,9 @@ Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
 
 Skills vivem em `.agents/skills/` e sao expostas via symlink para cada provider (`.claude/skills/`, `.gemini/skills/`, etc.). Fonte unica de verdade — sem duplicacao.
 
-Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes exatas):
+Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das skills gerenciadas via `npx skills`):
+
+**Arquitetura & qualidade de codigo**
 
 | Skill | Quando usar |
 |-------|-------------|
@@ -120,23 +105,48 @@ Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes exa
 | `clean-code-principles` | DRY, KISS, YAGNI, SOLID |
 | `solid-principles` | SOLID, TDD, design patterns, code smells |
 | `coding-standards` | Padroes universais TS/JS/React/Node |
+
+**TypeScript & performance**
+
+| Skill | Quando usar |
+|-------|-------------|
 | `typescript-best-practices` | Tipos avancados, illegal states, exhaustive handling |
-| `vercel-react-best-practices` | Performance React/Next.js |
-| `frontend-design` | Componentes UI de alta qualidade |
-| `ai-agents-architect` | Design de agentes, tool use, orquestracao |
+| `typescript-advanced-types` | Conditional, mapped, template literal types, inference |
+| `web-performance-optimization` | Bundle size, runtime perf, Core Web Vitals |
+
+**Seguranca**
+
+| Skill | Quando usar |
+|-------|-------------|
+| `api-security-best-practices` | Auth, authz, rate limit, input validation |
+| `top-web-vulnerabilities` | OWASP Top 10, categorias de vulnerabilidades |
+| `xss-html-injection` | XSS, HTML injection, client-side injection |
+
+**Testes & operacao**
+
+| Skill | Quando usar |
+|-------|-------------|
+| `playwright-best-practices` | E2E, browser automation, test patterns |
+| `update-docs` | Sincronizar docs apos mudanca significativa (le perfil em [`.agents/update-docs.profile.yaml`](./.agents/update-docs.profile.yaml)) |
 | `git-commit` | Mensagens de commit (Conventional Commits) |
+
+**Agentes & meta**
+
+| Skill | Quando usar |
+|-------|-------------|
+| `ai-agents-architect` | Design de agentes, tool use, orquestracao |
 | `find-skills` | Descobrir e instalar novas skills |
 
 ### Instalando novas skills
 
+Padrao: conteudo da skill vive em `.agents/skills/<nome>/`; cada provider expoe via symlink (ex.: `.claude/skills/<nome>` → `../../.agents/skills/<nome>`). Sem duplicacao.
+
 ```bash
-# Instala nos providers suportados (claude, gemini, github, cursor, codex, opencode)
+# Skills do registry oficial (gerenciadas via skills-lock.json)
 npx skills add <owner/repo@skill-name> -y
+
+# Skills manuais: copie o conteudo para .agents/skills/<nome>/ e crie symlinks nos
+# providers usados. Skills assim NAO ficam registradas em skills-lock.json.
 ```
 
 > Apos instalar, remova diretorios de providers nao suportados neste template.
-
----
-
-**Versao do template**: 2.0.0
-**Filosofia**: DRY — uma unica fonte de verdade para cada aspecto

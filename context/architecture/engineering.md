@@ -153,7 +153,7 @@ src/
 
 ## Padroes de Desenvolvimento
 
-> Para regras detalhadas de codigo, consulte [`.agent/rules/01-architecture.md`](../.agent/rules/01-architecture.md).
+> Para regras detalhadas de codigo, consulte [`.agents/rules/01-architecture.md`](../.agents/rules/01-architecture.md).
 
 ### Convencoes de Codigo
 
@@ -186,4 +186,4 @@ test(scope): adicao ou correcao de testes
 ## Referencias
 
 - [03-data-model.md](./03-data-model.md) - Modelo de dados
-- [.agent/rules/](../.agent/rules/) - Regras de codigo
+- [.agents/rules/](../.agents/rules/) - Regras de codigo

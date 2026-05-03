@@ -4,18 +4,34 @@
 
 ---
 
+## Convencao: dois entry points, skills centralizados
+
+Este template segue duas convencoes de descoberta para skills/regras:
+
+1. **Claude Code** le `CLAUDE.md` (raiz) + `.claude/` (skills, hooks, settings).
+2. **Codex, Gemini, OpenCode, GitHub Copilot** seguem a convencao "agents.md universal": leem `AGENTS.md` (raiz) + `.agents/` (skills).
+
+Skills ficam centralizados em **dois lugares**:
+
+- `.agents/skills/` — Source of Truth (arquivos reais)
+- `.claude/skills/` — symlinks apontando para `.agents/skills/` (necessario porque o Claude Code carrega skills daqui)
+
+**Cursor** tem seu proprio modelo (`.cursor/rules/*.mdc` na raiz), gerenciado separadamente.
+
+> Antes da v2.x este template tinha mirrors `.gemini/skills/`, `.codex/skills/`, etc. Foram removidos: providers que respeitam o padrao `AGENTS.md`/`.agents/` carregam direto do SSoT.
+
+---
+
 ## Visao Geral
 
-Cada ferramenta tem sua propria estrutura de configuracao:
-
-| Ferramenta | Pasta | Config Principal | MCPs |
-|------------|-------|------------------|------|
-| Claude Code | `.claude/` | `settings.json` | `.mcp.json` (raiz) |
-| Gemini | `.gemini/` | `settings.json` | Dentro do settings |
-| Cursor | `.cursor/` | `settings.json` + `rules/*.mdc` | Via settings.json |
-| Codex (OpenAI) | `.codex/` | `config.toml` | Via config |
-| OpenCode | `.opencode/` | `settings.json` | Via config |
-| GitHub Copilot | `.github/` | `copilot-instructions.md` | N/A |
+| Ferramenta | Entry point | Config | Onde le skills | MCPs |
+|------------|-------------|--------|----------------|------|
+| Claude Code | `CLAUDE.md` | `.claude/settings.json` | `.claude/skills/` (symlinks → `.agents/skills/`) | `.mcp.json` (raiz) |
+| Codex (OpenAI) | `AGENTS.md` | `.codex/config.toml` | `.agents/skills/` | Via config |
+| Gemini | `AGENTS.md` | `.gemini/settings.json` | `.agents/skills/` | Dentro do settings |
+| OpenCode | `AGENTS.md` | `.opencode/settings.json` | `.agents/skills/` | Via config |
+| GitHub Copilot | `AGENTS.md` + `.github/copilot-instructions.md` | `.github/copilot-instructions.md` | `.agents/skills/` | N/A |
+| Cursor | `.cursor/rules/*.mdc` | `.cursor/settings.json` + `.cursorrules` (raiz) | (proprio) | Via settings |
 
 ---
 
@@ -23,36 +39,30 @@ Cada ferramenta tem sua propria estrutura de configuracao:
 
 ```
 projeto/
+├── CLAUDE.md                       # Entry point Claude
+├── AGENTS.md                       # Entry point para Codex/Gemini/OpenCode/Copilot
+│
+├── .agents/                        # SSoT
+│   └── skills/                     # Skills reais (todos os providers leem daqui via AGENTS.md)
+│
 ├── .claude/
-│   ├── settings.json      # Permissoes e env vars
-│   └── skills/            # Skills instalados (symlinks)
+│   ├── settings.json               # Permissoes, env vars, hooks
+│   ├── skills/                     # Symlinks → ../../.agents/skills/
+│   ├── hooks/                      # Hooks ativos + examples/ opt-in
+│   └── commands/, agents/, ...     # GSD framework
 │
-├── .mcp.json              # MCPs do Claude (na raiz!)
+├── .agents/                         # Governance + rules (cross-provider)
+│   ├── governance/workflow.md
+│   └── rules/                      # 01-architecture.md, 02-pdi.md, 03-testing.md
 │
-├── .gemini/
-│   ├── settings.json      # Config + MCPs integrados
-│   └── skills/
+├── .mcp.json                       # MCPs do Claude (na raiz)
 │
-├── .cursor/
-│   ├── settings.json      # Configuracoes
-│   └── skills/
-│
-├── .cursorrules           # Rules do Cursor (na raiz)
-│
-├── .codex/
-│   ├── config.toml       # TOML, nao JSON!
-│   └── skills/
-│
-├── .opencode/
-│   ├── settings.json
-│   └── skills/
-│
-├── .github/
-│   ├── copilot-instructions.md  # Instrucoes Copilot
-│   └── skills/
-│
-├── CLAUDE.md              # Entry point Claude
-└── GEMINI.md              # Entry point Gemini
+├── .gemini/                        # Config Gemini (sem skills/ — le de .agents/)
+├── .codex/                         # Config Codex
+├── .opencode/                      # Config OpenCode
+├── .cursor/                        # Config Cursor (modelo proprio)
+└── .github/
+    └── copilot-instructions.md     # Instrucoes Copilot
 ```
 
 ---
@@ -67,22 +77,24 @@ projeto/
 | Codex | [codex.md](./codex.md) |
 | OpenCode | [opencode.md](./opencode.md) |
 | GitHub Copilot | [github-copilot.md](./github-copilot.md) |
+| **Verificando o carregamento** | [verifying-load.md](./verifying-load.md) |
 
 ---
 
 ## Skills Compartilhados
 
-Todos os skills ficam em `.agents/skills/` e sao linkados para cada ferramenta:
+Skills sao a forma como o agente recebe contexto procedural (como fazer X, quando aplicar Y). Eles ficam em **um unico lugar** — `.agents/skills/` — e sao expostos para o Claude via symlinks em `.claude/skills/`. Outros providers leem direto de `.agents/skills/` via convencao `AGENTS.md`.
 
 ```
-.agents/skills/           # Fonte (arquivos reais)
-├── clean-code-principles/
-├── coding-standards/
-└── typescript-best-practices/
+.agents/skills/                     # SSoT (arquivos reais)
+├── clean-architecture/
+├── typescript-best-practices/
+├── playwright-best-practices/
+└── ...
 
-.claude/skills/           # Symlinks
-├── clean-code-principles -> ../../.agents/skills/clean-code-principles
+.claude/skills/                     # Symlinks (Claude Code-only)
+├── clean-architecture -> ../../.agents/skills/clean-architecture
 └── ...
 ```
 
-Isso permite que um skill funcione em todas as ferramentas.
+Para adicionar uma skill nova: instale em `.agents/skills/` (manual ou via `npx skills add`) e crie symlink em `.claude/skills/`. Nao replique em outros providers.
