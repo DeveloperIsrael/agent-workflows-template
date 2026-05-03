@@ -28,7 +28,7 @@ Exemplos:
 ## Relacao com ADRs
 
 - **ADR** (`context/adr/`): _por que_ de uma decisao (registro historico)
-- **Rule** (`.agent/rules/`): _como aplicar_ no dia a dia (guia pratico)
+- **Rule** (`.agents/rules/`): _como aplicar_ no dia a dia (guia pratico)
 
 Uma decisao pode gerar um ADR **e** uma rule: o ADR explica o motivo, a rule o operacionaliza.
 

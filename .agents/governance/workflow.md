@@ -60,7 +60,7 @@ Para tasks complexas, documente a abordagem antes de codar:
 4. **Components**: Componentes UI
 5. **Tests**: Testes unitarios/integracao
 
-**Lembre-se** (ref: `.agent/rules/01-architecture.md`):
+**Lembre-se** (ref: `.agents/rules/01-architecture.md`):
 - Seguir padroes de codigo do projeto
 - Manter arquivos pequenos e focados
 - Documentar funcoes publicas
@@ -121,7 +121,7 @@ gh pr create --base main --title "[TASK-ID] Nome da Feature"
 - [ ] Testes passando
 
 ### Arquitetura
-- [ ] Segue padroes do projeto (`.agent/rules/`)
+- [ ] Segue padroes do projeto (`.agents/rules/`)
 - [ ] Nenhum arquivo muito grande (>500 linhas)
 - [ ] Funcoes complexas documentadas
 
@@ -178,6 +178,6 @@ refactor(api): extrai logica de validacao
 
 ## Referencias
 
-- [.agent/rules/01-architecture.md](../rules/01-architecture.md) - Padroes de codigo
+- [.agents/rules/01-architecture.md](../rules/01-architecture.md) - Padroes de codigo
 - [context/architecture/engineering.md](../../context/architecture/engineering.md) - Arquitetura do projeto
 - [context/adr/README.md](../../context/adr/README.md) - Decisoes arquiteturais
