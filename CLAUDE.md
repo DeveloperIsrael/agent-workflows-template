@@ -26,7 +26,7 @@ Ao iniciar uma task, leia nesta ordem:
 - **Task first**: abra task/issue ANTES de modificar codigo
 - **Branch**: `feature/[TASK-ID]-nome` ou `fix/[TASK-ID]-nome`
 - **Commits**: atomicos, mensagens descritivas (Conventional Commits)
-- **PR**: descricao clara + criterios de teste
+- **PR**: use [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) — Summary, Changes, Why, Test plan, Risk, Checklist
 
 ### Qualidade de Codigo
 - Seguir [`.agents/rules/`](./.agents/rules/)

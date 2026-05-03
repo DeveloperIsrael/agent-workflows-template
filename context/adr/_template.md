@@ -1,7 +1,7 @@
 ---
 title: "[TITULO_DA_DECISAO]"
 date: YYYY-MM-DD
-status: proposed  # proposed | accepted | superseded | deprecated
+status: proposed  # proposed | accepted | rejected | deprecated | superseded
 supersedes: null  # path/to/other-adr.md ou null
 superseded_by: null  # preenchido quando outra decisao substitui esta
 tags: []  # ex: [auth, data, ci, security]

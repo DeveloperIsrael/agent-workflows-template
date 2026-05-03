@@ -67,6 +67,54 @@ context/
 
 ---
 
+## Authority Hierarchy
+
+> Quando dois documentos discordam, o de maior autoridade vence. Codigo (migrations, schemas, configs) vence prosa. Use esta lista para decidir o que ler primeiro e o que atualizar quando uma decisao muda.
+
+1. [`../CLAUDE.md`](../CLAUDE.md) — governanca, meta-regras, leitura obrigatoria
+2. [`../.agents/rules/`](../.agents/rules/) — code standards, testing, regras stack-agnosticas
+3. [`adr/`](./adr/) com `status: accepted` — decisoes arquiteturais formais
+4. [`product/`](./product/) + [`domain/`](./domain/) — escopo, regras de negocio, modelo de dominio
+5. [`architecture/`](./architecture/) — contratos tecnicos (API, DB, plataforma)
+6. [`guides/`](./guides/) — guias operacionais (nao canonicos, mas atualizados)
+7. [`history/`](./history/) — contexto temporal (nao autoritativo)
+8. [`archive/`](./archive/) — obsoleto (ler para entender o passado, nunca citar como atual)
+
+**Regra de codigo > prosa**: arquivos em `src/`, migrations, schemas e configs de runtime sobrescrevem qualquer descricao textual. Se a doc descreve um endpoint diferente do que o handler implementa, o handler vence — atualize a doc, nao o codigo.
+
+---
+
+## Quando READ — qual doc consultar antes de mexer
+
+| Area que voce vai tocar | Leia primeiro |
+|---|---|
+| Auth, autorizacao, fronteira de seguranca | [`adr/`](./adr/) (filtre por `accepted`) + ADR referenciado em comentario do ponto de entrada |
+| Modelo de dados / entidades / schemas | [`domain/data-model.md`](./domain/data-model.md) + [`domain/glossary.md`](./domain/glossary.md) |
+| Regra de negocio / escopo do produto | [`product/prd.md`](./product/prd.md) + [`product/business-rules.md`](./product/business-rules.md) |
+| Contrato de API (request/response, status codes) | [`architecture/technical-specs.md`](./architecture/technical-specs.md) |
+| Schema de banco / migrations | `supabase/migrations/` (ou equivalente) sobrescreve qualquer descricao em `architecture/` |
+| Stack / monorepo / toolchain | [`architecture/engineering.md`](./architecture/engineering.md) |
+| Onboarding / setup local | [`guides/`](./guides/) |
+
+---
+
+## Quando WRITE — onde documentar o que voce fez
+
+| O que voce mudou | Onde documentar |
+|---|---|
+| Nova decisao arquitetural | Novo ADR em [`adr/YYYY-MM-DD-<slug>.md`](./adr/) (use [`_template.md`](./adr/_template.md)) |
+| Nova stack / dependencia / env var | [`architecture/engineering.md`](./architecture/engineering.md) |
+| Novo endpoint / mudanca de contrato | [`architecture/technical-specs.md`](./architecture/technical-specs.md) |
+| Nova tabela / migration / RLS policy | Migration em codigo + nota em [`architecture/technical-specs.md`](./architecture/technical-specs.md) ou [`domain/data-model.md`](./domain/data-model.md) |
+| Nova regra de negocio | [`product/business-rules.md`](./product/business-rules.md) |
+| Nova entidade ou termo de dominio | [`domain/data-model.md`](./domain/data-model.md) + [`domain/glossary.md`](./domain/glossary.md) |
+| Nova metrica de qualidade / lane de teste | [`quality/`](./quality/) |
+| Doc substituida | Mova para [`archive/`](./archive/) e linke o sucessor; nunca delete |
+
+**Nunca escreva em** [`archive/`](./archive/) (so move para la) ou em diretorios de referencia externa. Se nao souber onde um doc novo vai, abra ADR ou pergunte no PR.
+
+---
+
 ## Quick Links
 
 | Recurso | Link |
