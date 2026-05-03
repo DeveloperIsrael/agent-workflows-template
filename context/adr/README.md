@@ -1,31 +1,66 @@
 # Architecture Decision Records (ADRs)
 
-> Registro de decisões arquiteturais relevantes do projeto **[NOME_DO_PROJETO]**.
+> Registro canonico das decisoes arquiteturais do projeto **[NOME_DO_PROJETO]**.
+
+ADRs tornam decisoes **descobriveis, versionaveis e auditaveis** — permitindo que contribuidores (humanos ou agentes) entendam o *porque* das escolhas sem reabrir discussoes ja resolvidas.
+
+---
 
 ## O que e um ADR
 
 Documento curto que captura uma decisao tecnica significativa: o **contexto**, a **decisao tomada** e as **consequencias**. Nao e documentacao viva do codigo — e o registro de **porque** a arquitetura esta como esta.
 
-## Quando criar um ADR
+---
 
-Crie um ADR quando a decisao:
+## Quando escrever um ADR
 
-- Afeta boundaries entre modulos/servicos
-- Define uma politica que times devem seguir (ex.: autenticacao, RLS, estrategia de cache)
-- Troca uma stack ou framework relevante
-- Introduz um trade-off que voce quer que futuros mantenedores entendam
+Escreva um ADR quando a decisao:
 
-**Nao crie** ADR para: refatoracoes locais, escolhas reversiveis triviais, convencoes de formatacao.
+- **Altera como o sistema e construido ou operado** (nova dependencia, padrao arquitetural, contrato de API, escolha de infra)
+- **E dificil de reverter** uma vez que codigo foi escrito em cima dela
+- **Afeta outras pessoas ou agentes** que vao mexer no codebase depois
+- **Tem alternativas reais** que foram consideradas e rejeitadas
 
-## Convencao de Nomes
+**NAO escreva ADR para:**
 
-```
-YYYY-MM-DD-titulo-em-kebab-case.md
-```
+- Escolhas rotineiras dentro de um padrao ja estabelecido
+- Bug fixes ou correcoes de typo
+- Decisoes ja capturadas em ADR existente (atualize-o no lugar)
+- Preferencias de estilo ja cobertas por linters
 
-Exemplos:
-- `2026-01-15-adotar-repository-pattern.md`
-- `2026-02-03-migrar-para-postgres.md`
+---
+
+## Triggers proativos (para agentes)
+
+Se voce e um agente codificando no repo, **pare e proponha um ADR** antes de continuar quando:
+
+- Estiver prestes a introduzir uma nova dependencia
+- Estiver prestes a criar um novo padrao arquitetural (nova camada, nova convencao de API)
+- Estiver prestes a escolher entre duas alternativas reais com tradeoffs nao-obvios
+- Estiver prestes a mudar algo que contradiz um ADR aceito
+- Estiver escrevendo um comentario longo explicando "por que" — esse motivo pertence a um ADR
+
+---
+
+## Convencoes
+
+- **Diretorio:** `context/adr/`
+- **Nome do arquivo:** `YYYY-MM-DD-titulo-em-kebab-case.md`
+- **Status permitidos:** `proposed`, `accepted`, `rejected`, `deprecated`, `superseded`
+- **Frontmatter obrigatorio:**
+  ```yaml
+  ---
+  title: "[TITULO_DA_DECISAO]"
+  date: YYYY-MM-DD
+  status: proposed  # proposed | accepted | rejected | deprecated | superseded
+  supersedes: null  # path/para/outro-adr.md ou null
+  superseded_by: null  # preenchido quando outra decisao substitui esta
+  tags: []  # ex: [auth, data, ci, security]
+  ---
+  ```
+- **Template padrao:** [`_template.md`](./_template.md)
+
+---
 
 ## Estados
 
@@ -33,22 +68,50 @@ Exemplos:
 |--------|-------------|
 | `proposed` | Rascunho em discussao |
 | `accepted` | Decisao em vigor — seguir |
-| `superseded` | Substituida por outro ADR (referenciar no YAML) |
+| `rejected` | Considerada e descartada (mantida para historico) |
+| `superseded` | Substituida por outro ADR (referenciar em `superseded_by`) |
 | `deprecated` | Nao aplicar mais, mas mantida para historico |
 
-## Como criar
+---
 
-1. Copie [`_template.md`](./_template.md) com o novo nome.
-2. Preencha as secoes.
-3. Adicione uma linha na tabela abaixo.
-4. Abra PR com o ADR como arquivo separado.
+## Workflow
+
+1. **Proposta**: crie o ADR com `status: proposed` (copie `_template.md`)
+2. **Discussao**: itere ate alinhamento com decision-makers
+3. **Commit**: marque como `accepted` (ou `rejected`) e adicione no indice abaixo
+4. **Supersecao**: quando substituido, crie novo ADR e marque o antigo como `superseded` com link bidirecional (`superseded_by` no antigo, `supersedes` no novo)
+
+---
+
+## Consulta (obrigatorio antes de implementar)
+
+Antes de comecar trabalho que toque arquitetura (auth, data layer, API, infra, CI, seguranca), **leia os ADRs `accepted` aplicaveis**. Se encontrar conflito entre codigo e ADR, sinalize antes de mudar.
+
+Ao implementar codigo governado por um ADR, adicione comentario no ponto de entrada (sintaxe varia por linguagem):
+
+```ts
+// ADR: context/adr/2026-04-14-rls-defense-in-depth.md
+// Motivo: <resumo de uma linha>
+```
+
+```python
+# ADR: context/adr/2026-04-14-rls-defense-in-depth.md
+# Motivo: <resumo de uma linha>
+```
+
+---
 
 ## Indice
 
 | Data | Titulo | Status |
 |------|--------|--------|
-| _Nenhum ADR registrado ainda_ | | |
+| 2026-05-01 | [Template Multi-Stack Strategy](2026-05-01-template-multi-stack-strategy.md) | accepted |
+| _Adicione novos ADRs aqui_ | | |
 
 ---
 
-> **Leitura obrigatoria para agentes**: antes de alterar areas governadas por um ADR `accepted`, leia o registro e referencie-o em comentario no ponto de entrada da mudanca.
+## Referencias
+
+- **MADR (Markdown ADR):** https://adr.github.io/madr/
+- **Michael Nygard — Documenting Architecture Decisions:** https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+- **Skill `adr-skill`** (opcional, via plugin Claude Code): assistencia para criar/revisar ADRs
