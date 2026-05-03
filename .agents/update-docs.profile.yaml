@@ -1,0 +1,39 @@
+# Perfil para a skill global update-docs (auto-carregada de ~/.agents/skills/update-docs/)
+# Declara a estrutura de doc deste template multi-stack para acelerar o discovery.
+version: 1
+
+mappings:
+  architecture:
+    - context/architecture/engineering.md
+    - context/architecture/technical-specs.md
+  stack:
+    - context/architecture/engineering.md
+    - README.md
+  schema:
+    - context/architecture/technical-specs.md
+    - context/domain/data-model.md
+  domain:
+    - context/domain/data-model.md
+    - context/domain/glossary.md
+    - context/product/prd.md
+    - context/product/business-rules.md
+  code_pattern:
+    - CLAUDE.md
+    - .agents/rules/01-architecture.md
+    - .agents/rules/02-pdi.md
+    - .agents/rules/03-testing.md
+  setup:
+    - README.md
+  api:
+    - context/architecture/technical-specs.md
+
+adr:
+  dir: context/adr
+  template: context/adr/_template.md
+  naming: "YYYY-MM-DD-titulo-curto.md"
+
+disabled_categories: []
+
+notes:
+  - "AGENTS.md e GEMINI.md sao stubs — sempre edite CLAUDE.md (canonical)."
+  - "Template multi-stack: nao assuma stack especifica nos exemplos (ver ADR 2026-05-01-template-multi-stack-strategy)."
