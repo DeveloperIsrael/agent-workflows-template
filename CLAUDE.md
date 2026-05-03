@@ -14,7 +14,7 @@
 Ao iniciar uma task, leia nesta ordem:
 
 1. **Workflow de desenvolvimento** — [`.agents/governance/workflow.md`](./.agents/governance/workflow.md)
-2. **Regras de codigo** — [`.agents/rules/`](./.agents/rules/) (`01-architecture.md`, `02-pdi.md`, `03-testing.md`)
+2. **Regras de codigo** — [`.agents/rules/`](./.agents/rules/) (`01-architecture.md`, `02-pdi.md`, `03-testing.md`, `04-pre-pr-checks.md`)
 3. **Contexto do dominio** — [`context/README.md`](./context/README.md)
 4. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
 

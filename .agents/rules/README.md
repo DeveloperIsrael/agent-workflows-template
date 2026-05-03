@@ -40,4 +40,7 @@ Rules aqui sao **cross-provider**. Configuracoes especificas de provider (permis
 
 ## Rules Ativas
 
-- [`01-architecture.md`](./01-architecture.md) — padroes de arquitetura
+- [`01-architecture.md`](./01-architecture.md) — padroes de arquitetura (stack-agnostico)
+- [`02-pdi.md`](./02-pdi.md) — meta-rule do processo de PDI por projeto
+- [`03-testing.md`](./03-testing.md) — testes de verdade, anti-skip, 8 classes de vulnerabilidade
+- [`04-pre-pr-checks.md`](./04-pre-pr-checks.md) — comandos obrigatorios antes de `gh pr create` (lint / type-check / test / build)
