@@ -2,6 +2,8 @@
 
 > Documentacao de configuracao para GitHub Copilot.
 
+> **Aviso multi-stack**: o exemplo de `.github/copilot-instructions.md` abaixo (TypeScript strict mode, React functional components, Tailwind, Jest + React Testing Library, PascalCase em `.tsx`, `src/components/`/`hooks/`/`services/`) e para stack **React/TypeScript**. Substitua tudo pelos equivalentes da stack real do seu projeto antes de copiar — o conteudo do `copilot-instructions.md` deve descrever **o seu** projeto, nao replicar o exemplo. Para Python: tipo `mypy --strict`, FastAPI/Django, pytest, snake_case em `app/api/`. Para Go: golangci-lint, `cmd/`+`internal/`, `go test`. Para Java: Spring Boot, JUnit 5, `src/main/java/`. Etc.
+
 ---
 
 ## Estrutura de Arquivos

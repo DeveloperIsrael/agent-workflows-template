@@ -3,6 +3,8 @@
 > Documentacao de configuracao para Cursor IDE.
 > **Docs oficiais**: [docs.cursor.com/context/rules-for-ai](https://docs.cursor.com/context/rules-for-ai)
 
+> **Aviso multi-stack**: os exemplos abaixo (`globs: **/*.ts, **/*.tsx`, "React 18 + TypeScript", `src/components/`, PascalCase para componentes, `node_modules/` em ignore) sao para stack **React/TypeScript**. Em projetos Python, Go, Java, etc., substitua globs (`**/*.py`, `**/*.go`, `**/*.java`), convencoes (snake_case em Python, PascalCase em Go publico), estrutura (`app/`, `internal/`, `src/main/java/`) e ignores (`__pycache__/`, `target/`, `vendor/`) pelos equivalentes da sua stack. **Nao copie o exemplo cru** — o conteudo de `.cursor/rules/*.mdc` deve refletir a realidade do seu projeto.
+
 ---
 
 ## Estrutura de Arquivos

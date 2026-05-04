@@ -2,6 +2,8 @@
 
 Template de estrutura de documentacao e configuracao para projetos que utilizam **AI Coding Agents** (Claude Code, Gemini, Cursor, OpenCode, Codex, etc.).
 
+> **Agentes** (Claude/Gemini/Codex/Copilot/Cursor/OpenCode): leiam [`CLAUDE.md`](./CLAUDE.md) — entry point canonico em runtime. Este README e para humanos (setup, configuracao inicial, contribuicao).
+
 ---
 
 ## Proposito
@@ -9,7 +11,7 @@ Template de estrutura de documentacao e configuracao para projetos que utilizam 
 Este template fornece uma estrutura padronizada para:
 
 1. **Documentacao de Contexto** (`context/`) - Arquivos que os agentes leem para entender o projeto
-2. **Regras e Governanca** (`.agent/`) - Padroes de codigo e workflows de desenvolvimento
+2. **Regras e Governanca** (`.agents/`) - Padroes de codigo e workflows de desenvolvimento
 3. **Configuracoes de Agentes** (`.claude/`, `.gemini/`, `.cursor/`, etc.) - Settings especificos por ferramenta
 
 ---
@@ -44,15 +46,12 @@ Este template fornece uma estrutura padronizada para:
 │   ├── archive/                # Docs substituidos
 │   └── providers/              # Guias por provedor de AI
 │
-├── .agent/                     # Regras e governanca (cross-provider)
+├── .agents/                    # SSoT: governanca + regras + skills (cross-provider)
 │   ├── governance/workflow.md
 │   ├── rules/
 │   │   ├── README.md           # Convencao de rules
 │   │   └── 01-architecture.md  # Padroes de arquitetura
-│   └── skills/                 # Symlinks -> .agents/skills/
-│
-├── .agents/                    # SSoT de skills instaladas
-│   └── skills/
+│   └── skills/                 # Skills instaladas (expostas via symlink em .claude/, .gemini/, etc.)
 │
 ├── .claude/                    # Configuracoes Claude Code
 ├── .gemini/                    # Configuracoes Gemini
@@ -96,10 +95,10 @@ Preencha os arquivos em `context/`:
 
 ### 3. Configure as Regras do Agente
 
-Edite os arquivos em `.agent/`:
+Edite os arquivos em `.agents/`:
 
-- **`.agent/rules/01-architecture.md`** - Adapte para seu stack (React, Vue, Node, etc.)
-- **`.agent/governance/workflow.md`** - Configure seu workflow (Jira, Linear, ClickUp, etc.)
+- **`.agents/rules/01-architecture.md`** - Adapte para seu stack (React, Vue, Node, etc.)
+- **`.agents/governance/workflow.md`** - Configure seu workflow (Jira, Linear, ClickUp, etc.)
 
 ### 4. Configure as Ferramentas
 
@@ -131,7 +130,7 @@ cp .mcp.json.example .mcp.json
 |--------|-------------------|----------|
 | **Novo no Projeto** | `context/README` → `product/prd` → `architecture/engineering` | Entender visao e arquitetura |
 | **Desenvolvedor** | `domain/data-model` → `domain/glossary` → `product/business-rules` → `adr/` | Implementar features |
-| **LLM/Agente** | `CLAUDE.md` → `.agent/governance/` → `.agent/rules/` → `context/README` | Executar tarefas |
+| **LLM/Agente** | [`CLAUDE.md`](./CLAUDE.md) (entry point canonico — define a propria leitura obrigatoria) | Executar tarefas |
 
 ---
 
@@ -159,6 +158,8 @@ Cada ferramenta tem sua estrutura de configuracao. Veja detalhes em `context/pro
 | GitHub Copilot | `.github/copilot-instructions.md` | VS Code settings | N/A |
 
 > **Nota**: Consulte `context/providers/` para guias detalhados de cada ferramenta.
+>
+> **Skills, MCPs e comandos ativos** vivem em [`CLAUDE.md`](./CLAUDE.md) — nao duplique aqui.
 
 ---
 
@@ -175,3 +176,7 @@ Cada ferramenta tem sua estrutura de configuracao. Veja detalhes em `context/pro
 ## Licenca
 
 CC BY 4.0 - veja [LICENSE](LICENSE) para detalhes.
+
+---
+
+**Versao do template**: 2.0.0 — filosofia DRY (uma unica fonte de verdade para cada aspecto).

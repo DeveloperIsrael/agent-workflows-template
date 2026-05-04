@@ -29,4 +29,4 @@ alwaysApply: true
 
 ## References
 - `context/00-overview.md` - Project overview
-- `.agent/rules/01-architecture.md` - Architecture rules
+- `.agents/rules/01-architecture.md` - Architecture rules
