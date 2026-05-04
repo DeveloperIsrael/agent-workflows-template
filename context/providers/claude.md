@@ -2,6 +2,8 @@
 
 > Documentacao de configuracao para Claude Code (Anthropic).
 
+> **Aviso multi-stack**: o exemplo de `settings.json` abaixo (`Bash(npm run *)` em allow, `NODE_ENV` em env) e para projetos **Node/TS**. Em outras stacks, troque o padrao Bash pelo runner real do projeto (`Bash(pytest *)`, `Bash(go *)`, `Bash(./gradlew *)`, `Bash(cargo *)`, etc.) e ajuste env vars (`PYTHONPATH`, `GOFLAGS`, `JAVA_HOME`, etc.). O resto do exemplo (`Read(**)`, `Write(**)`, denies para `.env`/`secrets/`/`*.key`) e stack-agnostico.
+
 ---
 
 ## Estrutura de Arquivos

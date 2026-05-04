@@ -20,6 +20,18 @@ Ao iniciar uma task, leia nesta ordem:
 
 ---
 
+## Multi-Stack — Discovery Obrigatorio
+
+Este template e **stack-agnostico** (ver ADR [`context/adr/2026-05-01-template-multi-stack-strategy.md`](./context/adr/2026-05-01-template-multi-stack-strategy.md)). Os exemplos React/TS espalhados pelo template — estrutura `src/components/`, comandos `npm run *`, snippets `.tsx`, settings de Cursor/Copilot com globs `**/*.tsx` — sao **exemplos concretos**, nao prescricoes. Antes de aplicar qualquer recomendacao, identifique a stack real:
+
+1. **Brownfield com docs preenchidas**: se [`context/architecture/engineering.md`](./context/architecture/engineering.md) ja esta preenchido (sem placeholders `[TECH_*]`/`[FRAMEWORK_*]`), use-o como SSoT da stack.
+2. **Brownfield com docs vazias**: inspecione manifests reais na raiz na ordem — `package.json`, `pyproject.toml`/`requirements.txt`, `go.mod`, `Cargo.toml`, `pom.xml`/`build.gradle`, `Gemfile`, `composer.json`, `mix.exs`. O primeiro encontrado define a stack base. **Atualize `engineering.md`** com o que detectou para evitar nova descoberta na proxima task.
+3. **Greenfield (nada encontrado)**: pergunte ao user qual stack antes de aplicar exemplos. Nao assuma TS/React por default.
+
+Em qualquer caso: ao escrever novos arquivos/comandos no projeto, use as convencoes da stack detectada, nao as do template. Skills com afinidade de stack (`typescript-best-practices`, `playwright-best-practices`, etc.) so devem ser invocadas quando a stack do projeto as justifica.
+
+---
+
 ## TL;DR — Regras Criticas
 
 ### Workflow
@@ -94,9 +106,11 @@ Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
 
 Skills vivem em `.agents/skills/` e sao expostas via symlink para cada provider (`.claude/skills/`, `.gemini/skills/`, etc.). Fonte unica de verdade — sem duplicacao.
 
-Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das skills gerenciadas via `npx skills`):
+Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das skills gerenciadas via `npx skills`).
 
-**Arquitetura & qualidade de codigo**
+> Agrupamento por **aplicabilidade**, nao por tema. Skills stack-especificas seguem o ADR multi-stack: ficam no template mas so disparam quando o frontmatter `description`/`triggers` da skill casa com a stack/contexto do projeto.
+
+### Universal — sempre uteis, qualquer stack
 
 | Skill | Quando usar |
 |-------|-------------|
@@ -104,38 +118,26 @@ Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das
 | `clean-code` | Nomenclatura, funcoes, comentarios, erros |
 | `clean-code-principles` | DRY, KISS, YAGNI, SOLID |
 | `solid-principles` | SOLID, TDD, design patterns, code smells |
-| `coding-standards` | Padroes universais TS/JS/React/Node |
-
-**TypeScript & performance**
-
-| Skill | Quando usar |
-|-------|-------------|
-| `typescript-best-practices` | Tipos avancados, illegal states, exhaustive handling |
-| `typescript-advanced-types` | Conditional, mapped, template literal types, inference |
-| `web-performance-optimization` | Bundle size, runtime perf, Core Web Vitals |
-
-**Seguranca**
-
-| Skill | Quando usar |
-|-------|-------------|
-| `api-security-best-practices` | Auth, authz, rate limit, input validation |
-| `top-web-vulnerabilities` | OWASP Top 10, categorias de vulnerabilidades |
-| `xss-html-injection` | XSS, HTML injection, client-side injection |
-
-**Testes & operacao**
-
-| Skill | Quando usar |
-|-------|-------------|
-| `playwright-best-practices` | E2E, browser automation, test patterns |
-| `update-docs` | Sincronizar docs apos mudanca significativa (le perfil em [`.agents/update-docs.profile.yaml`](./.agents/update-docs.profile.yaml)) |
+| `coding-standards` | Padroes gerais de codigo (exemplos em TS/JS, principios aplicaveis a qualquer linguagem) |
 | `git-commit` | Mensagens de commit (Conventional Commits) |
-
-**Agentes & meta**
-
-| Skill | Quando usar |
-|-------|-------------|
+| `update-docs` | Sincronizar docs apos mudanca significativa (le perfil em [`.agents/update-docs.profile.yaml`](./.agents/update-docs.profile.yaml)) |
 | `ai-agents-architect` | Design de agentes, tool use, orquestracao |
 | `find-skills` | Descobrir e instalar novas skills |
+| `adr-skill` | Criar/manter ADRs |
+
+### Stack-especificas — lazy-triggered
+
+> Estas skills ficam silenciosas em projetos que nao casam com seu trigger. **Nao invoque manualmente** sem antes confirmar que a stack do projeto justifica.
+
+| Skill | Trigger / quando aplica |
+|-------|--------------------------|
+| `typescript-best-practices` | Projeto usa TypeScript (presenca de `tsconfig.json`, arquivos `.ts`/`.tsx`) |
+| `typescript-advanced-types` | TS, ao trabalhar com generics complexos / mapped / conditional types |
+| `web-performance-optimization` | Projeto frontend web (Core Web Vitals, bundle size) |
+| `api-security-best-practices` | Projeto expoe API HTTP (auth, authz, rate limit) — exemplos em Node, principios universais |
+| `top-web-vulnerabilities` | Aplicacao web (OWASP Top 10) |
+| `xss-html-injection` | Frontend web com renderizacao de input do usuario |
+| `playwright-best-practices` | Testes E2E com Playwright |
 
 ### Instalando novas skills
 

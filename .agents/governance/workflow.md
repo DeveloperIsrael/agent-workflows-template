@@ -53,12 +53,15 @@ Para tasks complexas, documente a abordagem antes de codar:
 
 ### Fase 4: Implementacao
 
-**Ordem recomendada**:
+**Ordem recomendada** (exemplo para projeto frontend React/TS — adapte a stack do seu projeto):
+
 1. **Types/Interfaces**: Definir tipos primeiro
 2. **Services/API**: Camada de dados
 3. **State/Store**: Gerenciamento de estado
 4. **Components**: Componentes UI
 5. **Tests**: Testes unitarios/integracao
+
+> Em backend Python/Java/Go ou CLI, a sequencia se parece mais com `Models/Schemas → Repositorios → Services → Handlers/Controllers → Tests`. Em projeto polyglot, aplique a sequencia por modulo. O principio (definir contornos antes da implementacao + tests no fim) e universal.
 
 **Lembre-se** (ref: `.agents/rules/01-architecture.md`):
 - Seguir padroes de codigo do projeto
@@ -67,21 +70,23 @@ Para tasks complexas, documente a abordagem antes de codar:
 
 ### Fase 5: Verificacao
 
+> Comandos abaixo sao placeholders — cada projeto define os seus em `.agents/rules/04-pre-pr-checks.md` baseado no build system real. Exemplos por stack ao lado.
+
 ```bash
-# TypeScript (se aplicavel)
-npm run type-check
+# Type-check (se a linguagem tem)
+[COMANDO_TYPECHECK]   # ex: npm run type-check, mypy, go vet, ./gradlew check, cargo check
 
 # Linting
-npm run lint
+[COMANDO_LINT]        # ex: npm run lint, ruff, golangci-lint, ./gradlew spotlessCheck, cargo clippy
 
 # Formatacao
-npm run format
+[COMANDO_FORMAT]      # ex: npm run format, ruff format, gofmt, ./gradlew spotlessApply, cargo fmt
 
 # Testes
-npm run test
+[COMANDO_TESTS]       # ex: npm test, pytest, go test ./..., ./gradlew test, cargo test
 
 # Build
-npm run build
+[COMANDO_BUILD]       # ex: npm run build, python -m build, go build, ./gradlew build, cargo build --release
 ```
 
 ### Fase 6: Pull Request

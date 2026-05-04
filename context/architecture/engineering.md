@@ -68,6 +68,10 @@ graph TB
 
 ## Estrutura de Pastas
 
+> Os blocos abaixo sao **exemplos por stack**. Apague os que nao se aplicam e mantenha apenas a estrutura real do seu projeto. Em template recem-clonado (greenfield), preencha conforme a stack escolhida.
+
+### Exemplo — Frontend React/Next
+
 ```
 src/
 ├── components/       # Componentes UI
@@ -80,6 +84,45 @@ src/
 ├── utils/            # Funcoes utilitarias
 ├── types/            # Tipos TypeScript
 └── assets/           # Arquivos estaticos
+```
+
+### Exemplo — Backend Python (FastAPI / Flask)
+
+```
+app/
+├── api/              # Routers / endpoints
+├── services/         # Logica de dominio
+├── repositories/     # Acesso a dados
+├── models/           # Pydantic / SQLAlchemy models
+├── schemas/          # DTOs de entrada/saida
+├── core/             # Config, security, dependencies
+└── tests/
+```
+
+### Exemplo — Backend Go
+
+```
+.
+├── cmd/<binario>/    # Entry points (main.go por binario)
+├── internal/         # Codigo nao-exportavel (handlers, services, repos)
+├── pkg/              # Codigo reutilizavel (se intencionalmente publico)
+├── api/              # OpenAPI / proto / schemas
+└── deploy/           # Manifests, Dockerfile, IaC
+```
+
+### Exemplo — Backend Java (Spring Boot)
+
+```
+src/
+├── main/
+│   ├── java/com/<org>/<projeto>/
+│   │   ├── controller/
+│   │   ├── service/
+│   │   ├── repository/
+│   │   ├── domain/        # Entities / value objects
+│   │   └── config/
+│   └── resources/         # application.yml, migrations
+└── test/
 ```
 
 ---

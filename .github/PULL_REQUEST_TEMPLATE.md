@@ -37,8 +37,8 @@ Apague linhas-guia e tags HTML antes de enviar.
 
 ## Review checklist
 
-- [ ] Sem `any` (ou escape hatch da linguagem) introduzido
-- [ ] Tipos exhaustivos onde aplicavel (discriminated unions cobertos)
+- [ ] Sem escape hatch de tipos introduzido (ex: `any`/`unknown` em TS, `Any`/`cast` em Python, `interface{}`/`any` em Go, `Object` cru / raw types em Java, `dynamic` em C#)
+- [ ] Tipos exhaustivos onde aplicavel (discriminated unions / enums / sealed classes / pattern matching cobertos)
 - [ ] Testes passam local (`<comando do projeto>`)
 - [ ] Sem skip novo de teste (ou justificado com SKIP-REASON + OWNER + DEADLINE — ver `.agents/rules/03-testing.md`)
 - [ ] Documentacao atualizada (`update-docs` skill se mudanca significativa)

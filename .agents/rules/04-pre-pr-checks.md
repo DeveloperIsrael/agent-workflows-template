@@ -19,15 +19,17 @@ Checklist em PR template e visual: alguem marca `[x]` ainda que nao tenha rodado
 
 ## Comandos obrigatorios (cada projeto define os seus)
 
-Este e o template canonico. Cada projeto que estende o template substitui os comandos abaixo no proprio `04-pre-pr-checks.md`, com base no `package.json` (ou equivalente) real:
+Este e o template canonico. Cada projeto que estende o template substitui os comandos abaixo no proprio `04-pre-pr-checks.md`, com base no manifest de build real (`package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `pom.xml`/`build.gradle`, etc.):
 
 ```bash
-pnpm lint              # linter (Biome / ESLint / outro)
-pnpm <type-check>      # `tsc --noEmit` ou `pnpm exec tsc --noEmit`
-pnpm <test>            # vitest run / jest / playwright (suite que roda em CI)
-pnpm build             # production build
+[COMANDO_LINT]         # ex: pnpm lint, ruff check, golangci-lint run, ./gradlew spotlessCheck
+[COMANDO_TYPECHECK]    # ex: tsc --noEmit, mypy ., go vet ./..., cargo check (se aplicavel)
+[COMANDO_TESTS]        # ex: pnpm test, pytest, go test ./..., ./gradlew test, cargo test
+[COMANDO_BUILD]        # ex: pnpm build, python -m build, go build ./..., ./gradlew build
 ```
 
+> Linguagens sem type-checker dedicado (Python sem MyPy, JS puro sem TS) podem omitir o passo — documentar a omissao no `04-pre-pr-checks.md` do projeto, nao silenciar.
+>
 > Repos sem stack runtime (docs-only / template) substituem por checks aplicaveis: validar parsing de ADRs, privacy guard regex, link checker.
 
 ---
@@ -53,7 +55,7 @@ pnpm build             # production build
 | `test` | Mudanca puramente em `.agents/`/`context/`/`.github/`/README | "Test plan" do PR |
 | `build` | Mudanca puramente em `.agents/`/`context/`/`.github/`/README | "Test plan" do PR |
 
-> Texto em `.tsx` / `.ts` (mesmo string literal) **pode quebrar tipos** — `type-check` nunca vira "puramente texto".
+> Texto em arquivos tipados (`.ts`/`.tsx`, `.py` com type hints, `.go`, `.rs`, `.java`/`.kt`, `.cs`) — mesmo string literal — **pode quebrar checagem de tipos**. `type-check` nunca vira "puramente texto" se a area tocada inclui codigo-fonte.
 
 ---
 
