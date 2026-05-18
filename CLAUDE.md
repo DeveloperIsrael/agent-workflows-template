@@ -5,7 +5,9 @@
 >
 > Substitua `[NOME_DO_PROJETO]` e demais placeholders `[TEXTO]` ao adotar o template.
 
-> **AVISO PARA AGENTES** — este repositorio **é um template** (`agent-workflows-template`). Tudo dentro de `.agents/`, `.claude/`, `.cursor/`, `.gemini/`, etc. existe para ser **herdado por projetos clonados a partir deste template**. NAO remova skills, regras, ou configuracoes daqui sob argumento de "duplicacao com setup global do usuario" — a duplicacao **e intencional**: o template precisa funcionar de forma standalone para quem clona. Mudancas aqui afetam todos os projetos futuros.
+> **AVISO PARA AGENTES — ESTE É UM TEMPLATE.** Este repositorio (`agent-workflows-template`) é um template feito para ser **herdado por projetos clonados a partir dele**. Tudo dentro de `.agents/`, `.claude/`, `.cursor/`, `.gemini/`, etc. existe para que o template funcione standalone — NAO remova skills, regras, ou configuracoes daqui sob argumento de "duplicacao com setup global do usuario": a duplicacao **é intencional**. Mudancas aqui afetam todos os projetos futuros.
+>
+> **Se você é um agente operando num projeto que ADOTOU este template** (não no template mesmo): o usuário humano precisa completar a checklist de adaptação descrita em [`README.md` → seção "Como Adaptar Este Template"](./README.md#como-adaptar-este-template). Se ao ler `context/architecture/engineering.md` você ainda encontrar placeholders `[TECH_*]`/`[FRAMEWORK_*]` ou comandos `[COMANDO_*]` em `.agents/rules/04-pre-pr-checks.md`, **pare e peça ao usuário pra completar a adaptação** antes de prosseguir com a task — você não conseguirá rodar checks que não existem.
 
 ---
 
