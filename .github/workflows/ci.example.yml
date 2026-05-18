@@ -1,0 +1,167 @@
+# .github/workflows/ci.example.yml — modelo de pipeline CI stack-agnóstico
+#
+# COMO USAR:
+#   1. Copie este arquivo: cp .github/workflows/ci.example.yml .github/workflows/ci.yml
+#   2. Substitua os placeholders <comando-*> pelos comandos reais da sua stack
+#   3. Ajuste a setup-action conforme a linguagem (setup-node, setup-python, setup-go, etc.)
+#   4. Ajuste os triggers (branches que disparam CI) conforme sua estratégia
+#   5. Configure branch protection no GitHub Settings → Branches → exigir status check "all-checks-passed"
+#
+# CONCEITO:
+#   - Estratégia "scoped por branch": full CI só em PRs pra main; develop confia no pre-push local
+#   - Job 'all-checks-passed' agrega todos os checks — único required status na branch protection
+#   - Permite adicionar/remover jobs sem mudar settings remotas
+#
+# Ver context/guides/ci-and-gates.md para o contexto completo da estratégia de gates.
+
+name: CI
+
+on:
+  # ADAPT: ajuste branches conforme seu workflow
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Cancela runs antigos da mesma branch (evita fila de jobs obsoletos)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ───── LINT ─────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # ADAPT: substitua pela setup-action da sua linguagem
+      # Node: actions/setup-node@v4 with node-version
+      # Python: actions/setup-python@v5 with python-version
+      # Go: actions/setup-go@v5 with go-version
+      # Rust: dtolnay/rust-toolchain
+      # Java: actions/setup-java@v4
+      - name: Setup runtime
+        run: echo "ADAPT: setup runtime for your stack"
+
+      # ADAPT: substitua pelo comando de install dependencies
+      - name: Install dependencies
+        run: <comando-install>   # ex: pnpm install --frozen-lockfile | pip install -r requirements.txt | go mod download
+
+      - name: Run linter
+        run: <comando-lint>      # ex: pnpm lint | ruff check . | golangci-lint run | cargo clippy -- -D warnings
+
+  # ───── TYPE-CHECK ───────────────────────────────────────────────────────────
+  # ADAPT: omita este job se sua linguagem não tem type-checker
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup runtime
+        run: echo "ADAPT: setup runtime for your stack"
+
+      - name: Install dependencies
+        run: <comando-install>
+
+      - name: Run type-checker
+        run: <comando-type-check>  # ex: pnpm type-check | tsc --noEmit | mypy . | go vet ./... | cargo check
+
+  # ───── UNIT TESTS ───────────────────────────────────────────────────────────
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup runtime
+        run: echo "ADAPT: setup runtime for your stack"
+
+      - name: Install dependencies
+        run: <comando-install>
+
+      - name: Run unit tests
+        run: <comando-test-unit>  # ex: pnpm test:unit | pytest -m unit | go test -short ./... | cargo test
+
+  # ───── BUILD ────────────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup runtime
+        run: echo "ADAPT: setup runtime for your stack"
+
+      - name: Install dependencies
+        run: <comando-install>
+
+      - name: Build
+        run: <comando-build>  # ex: pnpm build | python -m build | go build ./... | cargo build --release
+
+  # ───── SECRETS SCAN ─────────────────────────────────────────────────────────
+  secrets-scan:
+    name: Secrets Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history para TruffleHog escanear todos os commits
+
+      - name: Scan for leaked secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
+
+  # ───── E2E TESTS (só em PR pra main, opcional) ──────────────────────────────
+  # ADAPT: descomente e adapte se você tem suite E2E (Playwright, Cypress, etc.)
+  # test-e2e:
+  #   name: E2E Tests
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup runtime
+  #       run: echo "ADAPT: setup runtime + browsers"
+  #     - name: Install dependencies
+  #       run: <comando-install>
+  #     - name: Run E2E
+  #       run: <comando-test-e2e>  # ex: pnpm test:e2e | npx playwright test
+
+  # ───── A11Y TESTS (só em PR pra main, opcional) ─────────────────────────────
+  # ADAPT: descomente se você roda accessibility tests (axe-core, pa11y, etc.)
+  # test-a11y:
+  #   name: A11y Tests
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Run a11y suite
+  #       run: <comando-test-a11y>
+
+  # ───── ALL CHECKS PASSED (orquestrador) ─────────────────────────────────────
+  # Este é o único job que deve ser marcado como "required" na branch protection.
+  # Permite adicionar/remover jobs sem editar settings remotas.
+  all-checks-passed:
+    name: All Checks Passed
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - type-check
+      - test-unit
+      - build
+      - secrets-scan
+      # ADAPT: adicione aqui qualquer job opcional que você ativou (test-e2e, test-a11y, etc.)
+    if: always()
+    steps:
+      - name: Verify all jobs succeeded
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true" ]; then
+            echo "::error::One or more required jobs failed or were cancelled"
+            exit 1
+          fi
+          echo "All required checks passed."

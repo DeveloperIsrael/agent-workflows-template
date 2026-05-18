@@ -181,8 +181,36 @@ refactor(api): extrai logica de validacao
 
 ---
 
+## 8. Skill Defaults (gatilhos operacionais)
+
+Gatilhos canonicos para as skills universais do template. Espelhe esta tabela em `CLAUDE.md` se quiser que agentes a citem como entry point. Skills stack-especificas (ex.: `typescript-best-practices`, `playwright-best-practices`) sao **lazy-triggered** pelo proprio frontmatter — nao entram aqui.
+
+| Gatilho | Skill | Por que |
+|---|---|---|
+| Inicio de task comportamental (feature, bugfix reproduzivel, refactor com mudanca de comportamento) | `tdd` | Garante Red → Green → Refactor; evita "implementei e depois escrevi teste" |
+| Fechamento de task (PR pronto pra review) | `update-docs` | Sincroniza docs em `context/`, ADRs, READMEs com o codigo do mesmo PR |
+| Decisao arquitetural relevante | `adr-skill` | Cria/atualiza ADR no formato MADR 4.0 com Socratic prompting |
+| Commit | `git-commit` | Conventional Commits (`feat:`, `fix:`, `docs:`, etc.) |
+| Auditoria / second opinion antes de merge critico | (skill de audit do seu setup) | Reduz blind spot do agente principal — adapte ao tooling disponivel |
+
+> CSS puro, copy/typo, chore mecanico, comentario: **exceto TDD** (sem teste pra esses) — as outras skills continuam valendo onde aplicavel.
+
+---
+
+## 9. Gates de Validacao
+
+Estrategia de validacao em camadas (pre-push local → CI remoto → branch protection) e o porque de cada camada estao documentados em [`context/guides/ci-and-gates.md`](../../context/guides/ci-and-gates.md). Modelos de implementacao:
+
+- [`.githooks/pre-push.example`](../../.githooks/pre-push.example) — pre-push hook stack-agnostico (copie pra `pre-push`, adapte)
+- [`.github/workflows/ci.example.yml`](../../.github/workflows/ci.example.yml) — pipeline CI stack-agnostico (copie pra `ci.yml`, adapte)
+
+---
+
 ## Referencias
 
 - [.agents/rules/01-architecture.md](../rules/01-architecture.md) - Padroes de codigo
+- [.agents/rules/03-testing.md](../rules/03-testing.md) - Anti-skip + 8 vulnerabilidades obrigatorias
+- [.agents/rules/04-pre-pr-checks.md](../rules/04-pre-pr-checks.md) - Protocolo de checks pre-PR
 - [context/architecture/engineering.md](../../context/architecture/engineering.md) - Arquitetura do projeto
 - [context/adr/README.md](../../context/adr/README.md) - Decisoes arquiteturais
+- [context/guides/ci-and-gates.md](../../context/guides/ci-and-gates.md) - Estrategia de gates em camadas

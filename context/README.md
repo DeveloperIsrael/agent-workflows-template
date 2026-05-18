@@ -49,6 +49,7 @@ context/
 
 ### Guias
 - [`guides/user-guide.md`](./guides/user-guide.md) — Guia de uso e fluxos de UI
+- [`guides/ci-and-gates.md`](./guides/ci-and-gates.md) — Estrategia de validacao em camadas (pre-push, CI, branch protection)
 
 ### Meta
 - [`providers/`](./providers/) — Configuracao por provedor (Claude, Gemini, Cursor, Codex, OpenCode, Copilot)
@@ -92,7 +93,7 @@ context/
 | Modelo de dados / entidades / schemas | [`domain/data-model.md`](./domain/data-model.md) + [`domain/glossary.md`](./domain/glossary.md) |
 | Regra de negocio / escopo do produto | [`product/prd.md`](./product/prd.md) + [`product/business-rules.md`](./product/business-rules.md) |
 | Contrato de API (request/response, status codes) | [`architecture/technical-specs.md`](./architecture/technical-specs.md) |
-| Schema de banco / migrations | `supabase/migrations/` (ou equivalente) sobrescreve qualquer descricao em `architecture/` |
+| Schema de banco / migrations | Diretorio de migrations da stack (ex.: `migrations/`, `db/migrate/`, `prisma/migrations/`, `supabase/migrations/`) sobrescreve qualquer descricao em `architecture/` |
 | Stack / monorepo / toolchain | [`architecture/engineering.md`](./architecture/engineering.md) |
 | Onboarding / setup local | [`guides/`](./guides/) |
 
