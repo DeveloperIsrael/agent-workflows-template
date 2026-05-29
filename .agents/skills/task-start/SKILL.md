@@ -33,6 +33,10 @@ Antes de orquestrar, verifique o que ja existe — se a task ja esta em andament
 - [ ] Branch da task ja criado e em uso?
 - [ ] Status ja em `in_progress`? *(so se houver tracker)*
 
+Se **todos** os gates aplicaveis estao YES (task retomada mid-session), o
+workflow ja esta completo — **nao re-execute as fases**, prossiga direto para a
+implementacao. Mesmo em retomada, cheque os gates antes de assumir.
+
 ---
 
 ## Fase 1 — Tracker: sync + criar/verificar task  *(OPCIONAL)*
@@ -71,16 +75,33 @@ git checkout -b feature/[TASK-ID]-[nome-kebab]
 
 ## Fase 4 — Analise profunda (tasks complexas)
 
-Para tasks complexas — 3+ camadas de arquivo, mudanca de contrato de API,
-decisao arquitetural, ou estimativa alta — **planeje antes de codar**:
+**Criterios de complexidade (pelo menos 1):**
+- toca 3+ arquivos de camadas diferentes (estado + logica + UI/IO);
+- envolve mudanca de contrato de API ou schema persistido;
+- requer decisao arquitetural (candidato a ADR);
+- estimativa alta (> ~2h de implementacao).
+
+Se algum criterio casa, **planeje antes de codar**:
 
 - Se houver um MCP de raciocinio (ex.: `sequential-thinking`), use-o para mapear
-  arquivos impactados, dependencias e edge cases.
+  arquivos impactados, dependencias e edge cases — nao substitua por "vou pensar
+  passo a passo" inline; o MCP grava os passos de forma rastreavel.
 - Sem MCP: faca um planejamento estruturado por escrito (tasks/TODO) antes de editar.
+
+Para tasks simples (CSS, copy, chore, doc unico), pule esta fase e va direto para
+a implementacao.
 
 Apos planejar, consulte:
 - `Skill(workflow-governance)` — golden rules, status, commits, PR.
 - `Skill(architecture-rules)` — SoC/SRP, error handling, limites de tamanho.
+
+### Quando virar spec-driven (`/sdd:spec`)
+
+Se a task for **arriscada, ambigua, multi-arquivo ou arquitetural** — ou casar
+com os gatilhos de `TECHNICAL_DESIGN.md` (DB/auth/storage/security, migracao,
+risco de dados, refactor transversal, 2+ alternativas) — nao improvise: rode
+`/sdd:spec` para gerar um pacote `.specs/<slug>/` antes de implementar. O
+fechamento correspondente passa por `/sdd:review` antes de `/sdd:close`.
 
 ---
 
@@ -89,3 +110,19 @@ Apos planejar, consulte:
 Esta skill **orquestra** — invoque as sub-skills via `Skill` tool, nao as
 substitua por raciocinio inline. Se pular uma fase, justifique (ex.: "sem tracker,
 Fases 1 e 3 N/A"). Fechamento da task: skill `task-flow`.
+
+---
+
+## Verification Checklist (pos-inicio, pre-codigo)
+
+Para cada item, responda explicitamente "sim, fiz" ou "nao, pulei e o motivo e X":
+
+- [ ] **Fase 1 (se houver tracker):** sincronizei o tracker e confirmei/criei a task.
+- [ ] **Fase 2:** criei o branch da unidade de trabalho e estou nele.
+- [ ] **Fase 3 (se houver tracker):** status em `in_progress` + nota inicial.
+- [ ] **Fase 4 (condicional):** se a task e complexa, planejei antes de codar (MCP de raciocinio ou plano escrito); avaliei se deve virar `/sdd:spec`.
+- [ ] Consultei `architecture-rules` e `workflow-governance` apos o init.
+
+> **Hard rule:** "nao, pulei" exige motivo tecnico explicito (ex.: "Fases 1 e 3
+> N/A — projeto sem tracker"; "Fase 4 pulada — mudanca de 3 linhas em CSS").
+> "Achei desnecessario" nao vale.

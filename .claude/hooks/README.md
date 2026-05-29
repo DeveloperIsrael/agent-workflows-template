@@ -8,13 +8,7 @@ Este template e **stack-agnostico**. Hooks que dependem de uma toolchain especif
 
 ## Hooks ativos por padrao
 
-Os hooks listados em [`../settings.json`](../settings.json) rodam quando voce abre Claude Code neste projeto. Atualmente:
-
-- `gsd-check-update.js` — verifica updates do GSD (SessionStart)
-- `gsd-context-monitor.js` — monitora context window (PostToolUse)
-- `gsd-statusline.js` — gera a status line do GSD
-
-Esses sao do framework GSD e funcionam em qualquer stack.
+**Nenhum.** O template nao registra hook ativo em [`../settings.json`](../settings.json) — `settings.json` contem apenas `permissions` + `env`. Isso e proposital: hooks dependem de toolchain (lint/typecheck/test) e o template e stack-agnostico. Voce ativa os exemplos abaixo que casam com a sua stack.
 
 ---
 

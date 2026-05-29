@@ -27,6 +27,16 @@ Ao iniciar uma task:
 5. **Contexto do dominio** — [`context/README.md`](./context/README.md)
 6. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
 
+### Workflow Spec-Driven (`/sdd:*`)
+
+Para trabalho com risco ou ambiguidade, planeje antes de codar: `/sdd:spec` gera
+um pacote tecnico versionado em `.specs/<slug>/`, `/sdd:execute` consome o pacote
+aprovado, `/sdd:review` valida, `/sdd:close` fecha. `start`/`close` delegam a
+`task-start`/`task-flow`. Tracker-opcional, stack-agnostico. Guia:
+[`context/guides/spec-driven-development.md`](./context/guides/spec-driven-development.md);
+contrato: [`.specs/README.md`](./.specs/README.md). Decisao no ADR
+[`2026-05-28-adopt-sdd-remove-gsd.md`](./context/adr/2026-05-28-adopt-sdd-remove-gsd.md).
+
 ---
 
 ## Multi-Stack — Discovery Obrigatorio
@@ -74,7 +84,9 @@ Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
 
 > Arvore completa em [`README.md`](./README.md#estrutura-de-pastas). O agente em runtime precisa conhecer apenas:
 
-- [`.agents/skills/`](./.agents/skills/) — skills instaladas: **governanca + regras de codigo** (`workflow-governance`, `task-start`, `task-flow`, `architecture-rules`, `testing-discipline`, `pre-pr-checks`, `codex-review`) + skills stack-especificas. SSoT, expostas via symlink em cada provider.
+- [`.agents/skills/`](./.agents/skills/) — skills instaladas: **governanca + regras de codigo** (`workflow-governance`, `task-start`, `task-flow`, `architecture-rules`, `testing-discipline`, `pre-pr-checks`, `codex-review`), **spec-driven** (`sdd-spec`, `sdd-execute`, `sdd-review`) + skills stack-especificas. SSoT, expostas via symlink em cada provider.
+- [`.claude/commands/sdd/`](./.claude/commands/sdd/) — comandos finos `/sdd:*` (entry points do workflow spec-driven)
+- [`.specs/`](./.specs/) — pacotes spec-driven (`<slug>/` por unidade de trabalho; `_template/` copiavel)
 - [`context/`](./context/) — documentacao de dominio (PRD, arquitetura, ADRs, glossario)
 - [`.mcp.json`](./.mcp.json) — MCPs configurados
 
@@ -125,6 +137,9 @@ Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das
 |-------|-------------|
 | `task-start` | Inicio de task de codigo (ritual: tracker opcional → branch → analise) |
 | `task-flow` | Fechamento de task (commit → docs → checks → tracker opcional) |
+| `sdd-spec` | Planejamento spec-driven: cria pacote `.specs/<slug>/` antes de codar |
+| `sdd-execute` | Executa pacote aprovado respeitando write scope/forbidden files |
+| `sdd-review` | Revisao read-only contra o pacote/diff/PR antes do fechamento |
 | `workflow-governance` | Golden rules, status, Conventional Commits, protocolo de PR |
 | `architecture-rules` | SoC/SRP, estado, erros, performance, tamanho, anti-patterns |
 | `testing-discipline` | Anti-skip + 8 classes de vulnerabilidade (ao tocar testes) |
