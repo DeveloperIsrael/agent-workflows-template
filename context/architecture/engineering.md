@@ -196,7 +196,7 @@ src/
 
 ## Padroes de Desenvolvimento
 
-> Para regras detalhadas de codigo, consulte [`.agents/rules/01-architecture.md`](../.agents/rules/01-architecture.md).
+> Para regras detalhadas de codigo, consulte a skill `architecture-rules` ([`.agents/skills/architecture-rules/SKILL.md`](../../.agents/skills/architecture-rules/SKILL.md)).
 
 ### Convencoes de Codigo
 
@@ -229,4 +229,4 @@ test(scope): adicao ou correcao de testes
 ## Referencias
 
 - [03-data-model.md](./03-data-model.md) - Modelo de dados
-- [.agents/rules/](../.agents/rules/) - Regras de codigo
+- [.agents/skills/](../../.agents/skills/) - Skills de governanca + regras de codigo (`architecture-rules`, `testing-discipline`, `pre-pr-checks`)

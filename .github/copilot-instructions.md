@@ -107,6 +107,6 @@ export function useUser(id: string) {
 ## References
 
 - `context/README.md` - Project overview
-- `.agents/rules/01-architecture.md` - Architecture rules
+- `.agents/skills/architecture-rules/SKILL.md` - Architecture rules (skill)
 - `context/domain/glossary.md` - Terminology
 - `context/adr/README.md` - Architecture Decision Records

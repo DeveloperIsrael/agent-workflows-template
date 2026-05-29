@@ -146,11 +146,11 @@ ln -sf "../../.agents/skills/<nome>" ".claude/skills/<nome>"
 
 ## Quando o agente "esquece" a regra
 
-Se o agente conhece uma rule (ex: "TDD obrigatorio") mas nao aplica:
+Se o agente conhece uma regra (ex: "TDD obrigatorio", anti-skip) mas nao aplica:
 
-1. Confirme que a rule esta em `.agents/rules/` e e referenciada pelo `CLAUDE.md` / `AGENTS.md`.
-2. Confirme que o entry point cita a rule explicitamente — alguns providers so leem o entry point + arquivos diretamente referenciados, nao varrem `.agents/rules/` automaticamente.
-3. Adicione um exemplo concreto no entry point: "ANTES de mudar codigo, leia `.agents/rules/03-testing.md`".
+1. Confirme que a regra vive como skill em `.agents/skills/` e tem `description` com gatilhos no frontmatter — no Claude e o gatilho que dispara a skill.
+2. **Claude-first**: skills auto-carregam no Claude pelo frontmatter; outros providers (Cursor/Gemini/Codex) NAO varrem skills — eles leem o `CLAUDE.md`/`AGENTS.md`, que deve citar a skill e linkar o `SKILL.md` explicitamente.
+3. Adicione um exemplo concreto no entry point: "ANTES de mudar codigo, leia a skill `testing-discipline` (`.agents/skills/testing-discipline/SKILL.md`)".
 
 ---
 

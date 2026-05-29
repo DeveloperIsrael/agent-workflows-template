@@ -5,18 +5,27 @@
 >
 > Substitua `[NOME_DO_PROJETO]` e demais placeholders `[TEXTO]` ao adotar o template.
 
-> **AVISO PARA AGENTES** — este repositorio **é um template** (`agent-workflows-template`). Tudo dentro de `.agents/`, `.claude/`, `.cursor/`, `.gemini/`, etc. existe para ser **herdado por projetos clonados a partir deste template**. NAO remova skills, regras, ou configuracoes daqui sob argumento de "duplicacao com setup global do usuario" — a duplicacao **e intencional**: o template precisa funcionar de forma standalone para quem clona. Mudancas aqui afetam todos os projetos futuros.
+> **AVISO PARA AGENTES — ESTE É UM TEMPLATE.** Este repositorio (`agent-workflows-template`) é um template feito para ser **herdado por projetos clonados a partir dele**. Tudo dentro de `.agents/`, `.claude/`, `.cursor/`, `.gemini/`, etc. existe para que o template funcione standalone — NAO remova skills, regras, ou configuracoes daqui sob argumento de "duplicacao com setup global do usuario": a duplicacao **é intencional**. Mudancas aqui afetam todos os projetos futuros.
+>
+> **Se você é um agente operando num projeto que ADOTOU este template** (não no template mesmo): o usuário humano precisa completar a checklist de adaptação descrita em [`README.md` → seção "Como Adaptar Este Template"](./README.md#como-adaptar-este-template). Se ao ler `context/architecture/engineering.md` você ainda encontrar placeholders `[TECH_*]`/`[FRAMEWORK_*]` ou comandos `[COMANDO_*]` na skill `pre-pr-checks` (`.agents/skills/pre-pr-checks/SKILL.md`), **pare e peça ao usuário pra completar a adaptação** antes de prosseguir com a task — você não conseguirá rodar checks que não existem.
 
 ---
 
 ## Leitura Obrigatoria
 
-Ao iniciar uma task, leia nesta ordem:
+Governanca e regras de codigo vivem como **skills** em `.agents/skills/` (expostas
+via symlink em `.claude/skills/`). No Claude carregam sozinhas pelo gatilho do
+frontmatter; demais providers leem este `CLAUDE.md` e abrem o `SKILL.md` citado
+(ver ADR [`2026-05-27-governance-rules-as-skills.md`](./context/adr/2026-05-27-governance-rules-as-skills.md)).
 
-1. **Workflow de desenvolvimento** — [`.agents/governance/workflow.md`](./.agents/governance/workflow.md)
-2. **Regras de codigo** — [`.agents/rules/`](./.agents/rules/) (`01-architecture.md`, `02-pdi.md`, `03-testing.md`, `04-pre-pr-checks.md`)
-3. **Contexto do dominio** — [`context/README.md`](./context/README.md)
-4. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
+Ao iniciar uma task:
+
+1. **Inicio de task** — skill `task-start` (ritual de inicio; **tracker/task e opcional**)
+2. **Workflow e governanca** — skill `workflow-governance`
+3. **Regras de codigo** — skill `architecture-rules` (+ `testing-discipline` ao tocar testes, `pre-pr-checks` antes do PR)
+4. **Fechamento de task** — skill `task-flow`
+5. **Contexto do dominio** — [`context/README.md`](./context/README.md)
+6. **ADRs ativos** — [`context/adr/README.md`](./context/adr/README.md) — consulte antes de alterar areas governadas (status `accepted`) e referencie o ADR em comentario no ponto de entrada da mudanca
 
 ---
 
@@ -41,7 +50,7 @@ Em qualquer caso: ao escrever novos arquivos/comandos no projeto, use as convenc
 - **PR**: use [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) — Summary, Changes, Why, Test plan, Risk, Checklist
 
 ### Qualidade de Codigo
-- Seguir [`.agents/rules/`](./.agents/rules/)
+- Seguir as skills `architecture-rules` (+ `testing-discipline`, `pre-pr-checks`)
 - Documentar funcoes publicas
 - Tratar erros adequadamente
 - Arquivos pequenos e focados
@@ -65,9 +74,7 @@ Sempre que houver mudanca significativa, **atualize a documentacao afetada**:
 
 > Arvore completa em [`README.md`](./README.md#estrutura-de-pastas). O agente em runtime precisa conhecer apenas:
 
-- [`.agents/governance/`](./.agents/governance/) — workflow de desenvolvimento
-- [`.agents/rules/`](./.agents/rules/) — regras de codigo (arquitetura, PDI, testes)
-- [`.agents/skills/`](./.agents/skills/) — skills instaladas (SSoT, expostas via symlink em cada provider)
+- [`.agents/skills/`](./.agents/skills/) — skills instaladas: **governanca + regras de codigo** (`workflow-governance`, `task-start`, `task-flow`, `architecture-rules`, `testing-discipline`, `pre-pr-checks`, `codex-review`) + skills stack-especificas. SSoT, expostas via symlink em cada provider.
 - [`context/`](./context/) — documentacao de dominio (PRD, arquitetura, ADRs, glossario)
 - [`.mcp.json`](./.mcp.json) — MCPs configurados
 
@@ -110,6 +117,20 @@ Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das
 
 > Agrupamento por **aplicabilidade**, nao por tema. Skills stack-especificas seguem o ADR multi-stack: ficam no template mas so disparam quando o frontmatter `description`/`triggers` da skill casa com a stack/contexto do projeto.
 
+### Workflow & Processo — governanca como skill
+
+> Substituem as antigas pastas `.agents/governance/` + `.agents/rules/` (ver ADR [`2026-05-27-governance-rules-as-skills.md`](./context/adr/2026-05-27-governance-rules-as-skills.md)). **Tracker/task e opcional** em `workflow-governance`/`task-start`/`task-flow` — projetos sem ClickUp/Jira/Linear pulam os passos de tracker.
+
+| Skill | Quando usar |
+|-------|-------------|
+| `task-start` | Inicio de task de codigo (ritual: tracker opcional → branch → analise) |
+| `task-flow` | Fechamento de task (commit → docs → checks → tracker opcional) |
+| `workflow-governance` | Golden rules, status, Conventional Commits, protocolo de PR |
+| `architecture-rules` | SoC/SRP, estado, erros, performance, tamanho, anti-patterns |
+| `testing-discipline` | Anti-skip + 8 classes de vulnerabilidade (ao tocar testes) |
+| `pre-pr-checks` | Lint/type-check/test/build antes de `gh pr create` |
+| `codex-review` | Segunda opiniao em DB/security/refactor grande |
+
 ### Universal — sempre uteis, qualquer stack
 
 | Skill | Quando usar |
@@ -121,6 +142,7 @@ Skills instaladas (ver [`skills-lock.json`](./skills-lock.json) para versoes das
 | `coding-standards` | Padroes gerais de codigo (exemplos em TS/JS, principios aplicaveis a qualquer linguagem) |
 | `git-commit` | Mensagens de commit (Conventional Commits) |
 | `update-docs` | Sincronizar docs apos mudanca significativa (le perfil em [`.agents/update-docs.profile.yaml`](./.agents/update-docs.profile.yaml)) |
+| `root-cause-debugging` | Investigar bug ja manifestado — hipotese-first, verifica DB→API→state→render antes de fixar |
 | `ai-agents-architect` | Design de agentes, tool use, orquestracao |
 | `find-skills` | Descobrir e instalar novas skills |
 | `adr-skill` | Criar/manter ADRs |

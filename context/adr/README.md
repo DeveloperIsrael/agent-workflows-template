@@ -106,6 +106,7 @@ Ao implementar codigo governado por um ADR, adicione comentario no ponto de entr
 | Data | Titulo | Status |
 |------|--------|--------|
 | 2026-05-01 | [Template Multi-Stack Strategy](2026-05-01-template-multi-stack-strategy.md) | accepted |
+| 2026-05-27 | [Governanca e Regras como Skills](2026-05-27-governance-rules-as-skills.md) | accepted |
 | _Adicione novos ADRs aqui_ | | |
 
 ---

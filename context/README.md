@@ -49,6 +49,7 @@ context/
 
 ### Guias
 - [`guides/user-guide.md`](./guides/user-guide.md) — Guia de uso e fluxos de UI
+- [`guides/ci-and-gates.md`](./guides/ci-and-gates.md) — Estrategia de validacao em camadas (pre-push, CI, branch protection)
 
 ### Meta
 - [`providers/`](./providers/) — Configuracao por provedor (Claude, Gemini, Cursor, Codex, OpenCode, Copilot)
@@ -72,7 +73,7 @@ context/
 > Quando dois documentos discordam, o de maior autoridade vence. Codigo (migrations, schemas, configs) vence prosa. Use esta lista para decidir o que ler primeiro e o que atualizar quando uma decisao muda.
 
 1. [`../CLAUDE.md`](../CLAUDE.md) — governanca, meta-regras, leitura obrigatoria
-2. [`../.agents/rules/`](../.agents/rules/) — code standards, testing, regras stack-agnosticas
+2. [`../.agents/skills/`](../.agents/skills/) — governanca + regras de codigo como skills (`workflow-governance`, `architecture-rules`, `testing-discipline`, `pre-pr-checks`)
 3. [`adr/`](./adr/) com `status: accepted` — decisoes arquiteturais formais
 4. [`product/`](./product/) + [`domain/`](./domain/) — escopo, regras de negocio, modelo de dominio
 5. [`architecture/`](./architecture/) — contratos tecnicos (API, DB, plataforma)
@@ -92,7 +93,7 @@ context/
 | Modelo de dados / entidades / schemas | [`domain/data-model.md`](./domain/data-model.md) + [`domain/glossary.md`](./domain/glossary.md) |
 | Regra de negocio / escopo do produto | [`product/prd.md`](./product/prd.md) + [`product/business-rules.md`](./product/business-rules.md) |
 | Contrato de API (request/response, status codes) | [`architecture/technical-specs.md`](./architecture/technical-specs.md) |
-| Schema de banco / migrations | `supabase/migrations/` (ou equivalente) sobrescreve qualquer descricao em `architecture/` |
+| Schema de banco / migrations | Diretorio de migrations da stack (ex.: `migrations/`, `db/migrate/`, `prisma/migrations/`, `supabase/migrations/`) sobrescreve qualquer descricao em `architecture/` |
 | Stack / monorepo / toolchain | [`architecture/engineering.md`](./architecture/engineering.md) |
 | Onboarding / setup local | [`guides/`](./guides/) |
 

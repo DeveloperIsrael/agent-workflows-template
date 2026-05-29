@@ -1,18 +1,133 @@
 # Agent Workflows Template
 
-Template de estrutura de documentacao e configuracao para projetos que utilizam **AI Coding Agents** (Claude Code, Gemini, Cursor, OpenCode, Codex, etc.).
+> ⚠️ **ESTE É UM TEMPLATE — VOCÊ PRECISA ADAPTAR.**
+> Cada arquivo aqui é um **ponto de partida**, não o estado final do seu projeto. Antes de fazer qualquer coisa, leia a seção [**Como Adaptar Este Template**](#como-adaptar-este-template) abaixo (5 minutos). Existem coisas que você **não deve mudar** (princípios), e coisas que você **tem que preencher** (placeholders e configs).
 
-> **Agentes** (Claude/Gemini/Codex/Copilot/Cursor/OpenCode): leiam [`CLAUDE.md`](./CLAUDE.md) — entry point canonico em runtime. Este README e para humanos (setup, configuracao inicial, contribuicao).
+Template de estrutura de documentação e configuração para projetos que utilizam **AI Coding Agents** (Claude Code, Gemini, Cursor, OpenCode, Codex, Copilot).
+
+> **Agentes** (Claude/Gemini/Codex/Copilot/Cursor/OpenCode): leiam [`CLAUDE.md`](./CLAUDE.md) — entry point canônico em runtime. Este README é para humanos (setup, adaptação, contribuição).
 
 ---
 
-## Proposito
+## Propósito
 
 Este template fornece uma estrutura padronizada para:
 
-1. **Documentacao de Contexto** (`context/`) - Arquivos que os agentes leem para entender o projeto
-2. **Regras e Governanca** (`.agents/`) - Padroes de codigo e workflows de desenvolvimento
-3. **Configuracoes de Agentes** (`.claude/`, `.gemini/`, `.cursor/`, etc.) - Settings especificos por ferramenta
+1. **Documentação de Contexto** (`context/`) — arquivos que os agentes leem para entender o projeto
+2. **Regras e Governança** (`.agents/`) — padrões de código e workflows de desenvolvimento
+3. **Configurações de Agentes** (`.claude/`, `.gemini/`, `.cursor/`, etc.) — settings específicos por ferramenta
+
+**É stack-agnóstico**: feito pra ser herdado por projetos em React+NestJS, Next.js+Python, Go, Rust, Java, etc. As recomendações são princípios; comandos concretos (lint, type-check, test) ficam como **placeholders** que você preenche.
+
+---
+
+## Como Adaptar Este Template
+
+### O modelo mental
+
+O template é dividido em **três camadas**:
+
+| Camada | O que é | O que você faz |
+|---|---|---|
+| **Princípios** (não mude) | Workflow de governança, ADR como formato de decisão, anti-skip em testes, hierarquia de autoridade, pre-PR checks como conceito, conventional commits, task-first | **Herde** sem editar. Foram destilados de projetos reais e funcionam em qualquer stack. |
+| **Estrutura** (renomeie/preencha) | Pastas `context/`, `.agents/`, `.claude/`, ADR template, README skeleton | **Mantenha** a estrutura, **preencha** os placeholders. Cada arquivo tem `[PLACEHOLDER]` ou `<placeholder>` indicando o que trocar. |
+| **Comandos e Tooling** (substitua pelos seus) | `[COMANDO_LINT]`, `[COMANDO_TYPECHECK]`, `[COMANDO_TESTS]`, hooks de exemplo, workflows de CI | **Substitua** pelos comandos da sua stack. O template usa placeholders justamente porque não sabe se você está em pnpm, pytest, cargo, etc. |
+
+### O que NÃO mudar (princípios)
+
+Estes são padrões maduros — não os remova achando que é redundância:
+
+- **Hierarquia de autoridade** em [`context/README.md`](./context/README.md) — define quem ganha quando dois docs discordam.
+- **Workflow task-first** na skill `workflow-governance` — task criada **antes** de tocar código *(quando há tracker — é opcional; sem tracker, o branch é o registro)*.
+- **Anti-skip + 8 vulnerabilidades obrigatórias** na skill `testing-discipline` — vale pra qualquer runner.
+- **Pre-PR checks** na skill `pre-pr-checks` — reviewer humano não descobre PR quebrado.
+- **ADR como formato de decisão** em [`context/adr/`](./context/adr/) — MADR 4.0 com frontmatter.
+- **Convencional commits** na skill `workflow-governance` — `feat:`, `fix:`, `docs:`, etc.
+- **Skills universais** em [`CLAUDE.md`](./CLAUDE.md) — `clean-architecture`, `clean-code`, `update-docs`, `git-commit`, `adr-skill`, etc.
+
+> Se um princípio aqui não faz sentido pro seu projeto, abra um ADR no seu repo registrando a divergência. Não delete silenciosamente.
+
+### O que VOCÊ DEVE adaptar (checklist 30 minutos)
+
+Marque conforme for completando. Cada linha aponta pro arquivo que você abre:
+
+```
+[ ] 1. Trocar nome e descrição
+       - README.md (este arquivo) — substituir "Agent Workflows Template" pelo nome do seu projeto
+       - CLAUDE.md — substituir [NOME_DO_PROJETO] e demais [PLACEHOLDER]
+       - context/README.md — substituir [NOME_DO_PROJETO]
+
+[ ] 2. Preencher contexto do produto
+       - context/product/prd.md — visão, problema, escopo
+       - context/product/business-rules.md — regras de negócio
+       - context/domain/glossary.md — termos do domínio
+       - context/domain/data-model.md — entidades, relações
+
+[ ] 3. Declarar a stack
+       - context/architecture/engineering.md — substituir TODOS os [TECH_*] e [FRAMEWORK_*]
+                                                (linguagem, framework, runtime, build tool, deploy target, observability)
+       - context/architecture/technical-specs.md — contratos técnicos específicos
+
+[ ] 4. Adaptar pre-PR checks ao seu build system
+       - .agents/skills/pre-pr-checks/SKILL.md — substituir [COMANDO_LINT], [COMANDO_TYPECHECK],
+                                                  [COMANDO_TESTS], [COMANDO_BUILD] pelos comandos reais
+
+[ ] 5. Configurar tracker e workflow (OPCIONAL — pule se não usa tracker)
+       - .agents/skills/workflow-governance/SKILL.md — escolher ferramenta (ClickUp/Linear/Jira/
+                                          GitHub Projects) e ajustar a tabela de status; ou remover
+                                          a seção de status se o projeto não usa gerenciador de tasks
+
+[ ] 6. Configurar MCPs (se usar)
+       - cp .mcp.json.example .mcp.json
+       - Editar com os MCPs que seu projeto realmente usa
+       - Atualizar a tabela de MCPs em CLAUDE.md
+
+[ ] 7. Configurar settings por ferramenta
+       - .claude/settings.json — permissions (allowlist por comando, denylist de secrets)
+       - .cursor/settings.json, .gemini/settings.json, etc. — só se você usa cada ferramenta
+
+[ ] 8. Configurar gates locais (opcional mas recomendado)
+       - cp .githooks/pre-push.example .githooks/pre-push
+       - Editar comandos (lint/type-check/test) pra sua stack
+       - chmod +x .githooks/pre-push
+       - git config core.hooksPath .githooks
+
+[ ] 9. Configurar CI remoto (opcional)
+       - cp .github/workflows/ci.example.yml .github/workflows/ci.yml
+       - Editar matrix da stack (Node? Python? Java? Multi-version?)
+       - Substituir [COMANDO_*] pelos comandos reais
+
+[ ] 10. Registrar a decisão de stack
+        - Criar primeiro ADR: context/adr/YYYY-MM-DD-stack-decision.md (use _template.md)
+        - Status `accepted`, registrar runtime + framework + deploy target
+        - Vai ser a primeira coisa que agentes vão consultar
+```
+
+> **Dica:** depois de completar 1–3, rode um agente e peça "leia `CLAUDE.md` + `context/` e me diga 3 coisas sobre meu projeto". Se a resposta for genérica ou tiver `[PLACEHOLDER]`, faltou preencher algo.
+
+### Detectando "stack-leak" (auditoria pós-adaptação)
+
+Antes de considerar a adaptação concluída, rode este grep pra garantir que nenhum exemplo do template "vazou" como se fosse regra do seu projeto:
+
+```bash
+grep -rInIE "pnpm|biome|vitest|tsc --noEmit|tailwind|nestjs|supabase|playwright" \
+  .agents/ context/ CLAUDE.md README.md
+```
+
+Resultado esperado: **só hits em blocos explicitamente marcados como `> Exemplo:` ou em arquivos `*.example`**. Qualquer hit em regra/instrução é stack-leak — generalize com placeholder ou substitua pela ferramenta da sua stack.
+
+### Convenção visual de marcadores
+
+Quando ler arquivos do template, esses padrões indicam o que adaptar:
+
+| Marcador | Significado |
+|---|---|
+| `[NOME_DO_PROJETO]`, `[TEXTO]`, `[URL]` | **Placeholder obrigatório** — substitua antes de usar |
+| `[TECH_*]`, `[FRAMEWORK_*]`, `[COMANDO_*]` | **Placeholder stack-específico** — preencha com a tecnologia escolhida |
+| `<placeholder>` | **Trecho de código a substituir** — geralmente em scripts shell ou YAML |
+| `> Exemplo:` ou bloco com "ex:" | **Ilustrativo** — não é prescrição, mostra como ficaria em uma stack específica |
+| Sufixo `.example` (ex: `pre-push.example`) | **Arquivo modelo** — copie para nome sem sufixo e edite |
+| `<!-- ADAPT: ... -->` | **Instrução inline** — explica o que preencher naquela linha |
 
 ---
 
@@ -25,101 +140,56 @@ Este template fornece uma estrutura padronizada para:
 ├── AGENTS.md                   # Stub -> CLAUDE.md (Codex/OpenCode)
 ├── README.md                   # Este arquivo (para humanos)
 │
-├── context/                    # Documentacao de contexto (semantica por pasta)
-│   ├── README.md               # Indice e guia de leitura
-│   ├── product/                # PRD, regras de negocio
+├── context/                    # Documentação de contexto (semântica por pasta)
+│   ├── README.md               # Índice, guia de leitura, hierarquia de autoridade
+│   ├── product/                # PRD, regras de negócio
 │   │   ├── prd.md
 │   │   └── business-rules.md
-│   ├── architecture/           # Stack, engenharia, specs tecnicas
+│   ├── architecture/           # Stack, engenharia, specs técnicas
 │   │   ├── engineering.md
 │   │   └── technical-specs.md
-│   ├── domain/                 # Modelo de dados e glossario
+│   ├── domain/                 # Modelo de dados e glossário
 │   │   ├── data-model.md
 │   │   └── glossary.md
-│   ├── guides/                 # Guias de uso e onboarding
-│   │   └── user-guide.md
-│   ├── adr/                    # Architecture Decision Records
-│   │   ├── README.md           # Convencao + indice
+│   ├── guides/                 # Guias de uso, onboarding, gates
+│   │   ├── user-guide.md
+│   │   └── ci-and-gates.md     # Conceito de camadas de validação
+│   ├── adr/                    # Architecture Decision Records (MADR 4.0)
+│   │   ├── README.md           # Convenção + índice
 │   │   └── _template.md        # Template de ADR
-│   ├── quality/                # Metricas, cobertura (slot vazio)
-│   ├── history/                # Roadmaps e analises passadas
-│   ├── archive/                # Docs substituidos
+│   ├── quality/                # Métricas, cobertura (slot vazio)
+│   ├── history/                # Roadmaps e análises passadas
+│   ├── archive/                # Docs substituídos
 │   └── providers/              # Guias por provedor de AI
 │
-├── .agents/                    # SSoT: governanca + regras + skills (cross-provider)
-│   ├── governance/workflow.md
-│   ├── rules/
-│   │   ├── README.md           # Convencao de rules
-│   │   └── 01-architecture.md  # Padroes de arquitetura
-│   └── skills/                 # Skills instaladas (expostas via symlink em .claude/, .gemini/, etc.)
+├── .agents/                    # SSoT: skills (governança + regras + stack), cross-provider
+│   ├── skills/                 # Skills instaladas (SSoT, expostas via symlink)
+│   │   ├── workflow-governance/    # Golden rules, status, commits, PR (tracker opcional)
+│   │   ├── task-start/             # Ritual de início (tracker opcional → branch → análise)
+│   │   ├── task-flow/              # Ritual de fechamento (commit → docs → checks → tracker)
+│   │   ├── architecture-rules/     # SoC/SRP, estado, erros, tamanho, anti-patterns
+│   │   ├── testing-discipline/     # Anti-skip + 8 vulnerabilidades
+│   │   ├── pre-pr-checks/          # Lint/type-check/test/build antes do PR
+│   │   ├── codex-review/           # Segunda opinião (DB/security/refactor grande)
+│   │   └── ...                     # skills universais + stack-específicas
+│   └── update-docs.profile.yaml    # Perfil de doc-sync (opcional)
 │
-├── .claude/                    # Configuracoes Claude Code
-├── .gemini/                    # Configuracoes Gemini
-├── .cursor/                    # Configuracoes Cursor
-├── .codex/                     # Configuracoes Codex (OpenAI)
-├── .opencode/                  # Configuracoes OpenCode
-├── .github/                    # Configuracoes GitHub Copilot
+├── .githooks/                  # Git hooks opt-in
+│   └── pre-push.example        # Modelo de pre-push (renomear para 'pre-push' e adaptar)
 │
-└── .mcp.json.example           # Template de MCPs (renomear para .mcp.json)
-```
-
----
-
-## Como Usar Este Template
-
-### 1. Clone ou Fork
-
-```bash
-# Via GitHub template
-gh repo create meu-projeto --template seu-usuario/agent-workflows-template
-
-# Ou copie manualmente
-cp -r agent-workflows-template/ meu-projeto/
-```
-
-### 2. Preencha a Documentacao de Contexto
-
-Preencha os arquivos em `context/`:
-
-| Arquivo | O que preencher | Quem deve preencher |
-|---------|-----------------|---------------------|
-| `README.md` | Nome do projeto, links para outros docs | Tech Lead / PM |
-| `product/prd.md` | Visao, problema, solucao, escopo | Product Manager |
-| `product/business-rules.md` | Regras de negocio e validacoes | PM + Devs |
-| `domain/data-model.md` | Entidades, schemas, relacionamentos | Arquiteto / Senior Dev |
-| `architecture/engineering.md` | Stack, estrutura de pastas | Tech Lead |
-| `architecture/technical-specs.md` | Specs tecnicas especificas | Senior Devs |
-| `domain/glossary.md` | Glossario de termos e entidades | Time todo |
-| `guides/user-guide.md` | Fluxos de usuario, UI/UX | Designer / PM |
-| `adr/*.md` | Decisoes arquiteturais relevantes | Tech Lead |
-
-### 3. Configure as Regras do Agente
-
-Edite os arquivos em `.agents/`:
-
-- **`.agents/rules/01-architecture.md`** - Adapte para seu stack (React, Vue, Node, etc.)
-- **`.agents/governance/workflow.md`** - Configure seu workflow (Jira, Linear, ClickUp, etc.)
-
-### 4. Configure as Ferramentas
-
-Ajuste os arquivos de configuracao por ferramenta (veja `context/providers/` para detalhes):
-
-| Ferramenta | Arquivo | Formato |
-|------------|---------|---------|
-| Claude Code | `.claude/settings.json` | JSON |
-| Gemini | `.gemini/settings.json` | JSON |
-| Cursor | `.cursor/rules/*.mdc` | MDC (Markdown + YAML) |
-| Codex | `.codex/config.toml` | TOML |
-| OpenCode | `.opencode/settings.json` | JSON |
-| Copilot | `.github/copilot-instructions.md` | Markdown |
-
-### 5. Configure MCPs (opcional)
-
-Para usar MCP servers com Claude Code:
-
-```bash
-cp .mcp.json.example .mcp.json
-# Edite .mcp.json com suas configuracoes
+├── .github/                    # Configurações GitHub
+│   ├── workflows/
+│   │   └── ci.example.yml      # Modelo de CI (renomear para 'ci.yml' e adaptar)
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── copilot-instructions.md
+│
+├── .claude/                    # Configurações Claude Code
+├── .gemini/                    # Configurações Gemini
+├── .cursor/                    # Configurações Cursor
+├── .codex/                     # Configurações Codex (OpenAI)
+├── .opencode/                  # Configurações OpenCode
+│
+└── .mcp.json.example           # Template de MCPs (copiar para .mcp.json)
 ```
 
 ---
@@ -128,55 +198,66 @@ cp .mcp.json.example .mcp.json
 
 | Perfil | Caminho de Leitura | Objetivo |
 |--------|-------------------|----------|
-| **Novo no Projeto** | `context/README` → `product/prd` → `architecture/engineering` | Entender visao e arquitetura |
-| **Desenvolvedor** | `domain/data-model` → `domain/glossary` → `product/business-rules` → `adr/` | Implementar features |
-| **LLM/Agente** | [`CLAUDE.md`](./CLAUDE.md) (entry point canonico — define a propria leitura obrigatoria) | Executar tarefas |
+| **Adotando o template pela 1ª vez** | Este README (seção [Como Adaptar](#como-adaptar-este-template)) → checklist 10 itens | Configurar projeto novo |
+| **Novo dev no projeto adaptado** | `context/README` → `product/prd` → `architecture/engineering` | Entender visão e arquitetura |
+| **Desenvolvedor ativo** | `domain/data-model` → `domain/glossary` → `product/business-rules` → `adr/` | Implementar features |
+| **LLM/Agente** | [`CLAUDE.md`](./CLAUDE.md) (entry point canônico — define a própria leitura obrigatória) | Executar tarefas |
 
 ---
 
 ## Regras de Ouro
 
-1. **Single Source of Truth (SSoT)**: Cada conceito tem um unico lugar canonico. Outros arquivos apenas referenciam.
-2. **Terminologia Consistente**: Defina termos em `context/domain/glossary.md` e use-os consistentemente.
-3. **Documentacao Viva**: Atualize os docs junto com o codigo.
-4. **ADRs para decisoes**: registre decisoes arquiteturais em `context/adr/` antes de implementar.
-5. **Agentes como Primeira Classe**: escreva documentacao pensando que um LLM vai ler — por isso `CLAUDE.md` e canonico e outros entry points sao stubs.
+1. **Single Source of Truth (SSoT)**: cada conceito tem **um** lugar canônico. Outros arquivos apenas referenciam.
+2. **Terminologia Consistente**: defina termos em `context/domain/glossary.md` e use-os consistentemente.
+3. **Documentação Viva**: atualize os docs **junto** com o código (mesmo PR, não depois).
+4. **ADRs para decisões**: registre decisões arquiteturais em `context/adr/` antes de implementar.
+5. **Agentes como Primeira Classe**: escreva docs pensando que um LLM vai ler — por isso `CLAUDE.md` é canônico e outros entry points são stubs.
+6. **Stack-leak proibido**: nenhuma regra deve assumir stack específica. Exemplos ficam em blocos `> Exemplo:` ou arquivos `*.example`.
 
 ---
 
-## Configuracao por Ferramenta
+## Configuração por Ferramenta
 
-Cada ferramenta tem sua estrutura de configuracao. Veja detalhes em `context/providers/`.
+Cada ferramenta tem sua estrutura de configuração. Veja detalhes em `context/providers/`.
 
 | Ferramenta | Entry Point | Config | MCPs |
 |------------|-------------|--------|------|
-| Claude Code | `CLAUDE.md` (canonico) | `.claude/settings.json` | `.mcp.json` (raiz) |
+| Claude Code | `CLAUDE.md` (canônico) | `.claude/settings.json` | `.mcp.json` (raiz) |
 | Gemini | `GEMINI.md` (stub) | `.gemini/settings.json` | Dentro do settings |
 | Cursor | `.cursor/rules/*.mdc` | `.cursor/settings.json` | Via settings |
 | Codex (OpenAI) | `AGENTS.md` (stub) | `.codex/config.toml` | Via config |
 | OpenCode | `AGENTS.md` (stub) | `.opencode/settings.json` | Via config |
 | GitHub Copilot | `.github/copilot-instructions.md` | VS Code settings | N/A |
 
-> **Nota**: Consulte `context/providers/` para guias detalhados de cada ferramenta.
+> **Nota**: consulte `context/providers/` para guias detalhados de cada ferramenta.
 >
-> **Skills, MCPs e comandos ativos** vivem em [`CLAUDE.md`](./CLAUDE.md) — nao duplique aqui.
+> **Skills, MCPs e comandos ativos** vivem em [`CLAUDE.md`](./CLAUDE.md) — não duplique aqui.
 
 ---
 
-## Contribuindo
+## Contribuindo (para o próprio template)
 
-1. Fork este repositorio
-2. Crie uma branch (`git checkout -b feature/melhoria`)
-3. Commit suas mudancas (`git commit -m 'feat: adiciona X'`)
-4. Push para a branch (`git push origin feature/melhoria`)
-5. Abra um Pull Request
+Mudanças aqui afetam **todos os projetos futuros** que clonarem este template. Critérios:
+
+- ✅ Padrão maduro em pelo menos 1 projeto real, com evidência (link pro repo ou ADR).
+- ✅ Genérico o suficiente pra não amarrar a stack específica.
+- ❌ Configuração que serve só pra um projeto (ex: comando `pnpm tsc` em rule).
+- ❌ Skill stack-específica como default (lazy-trigger só, via frontmatter).
+
+Workflow:
+
+1. Fork este repositório
+2. Crie uma branch (`git checkout -b feature/<descricao>`)
+3. Commit suas mudanças (`git commit -m 'feat: adiciona X'`)
+4. Push para a branch (`git push origin feature/<descricao>`)
+5. Abra um Pull Request explicando: (a) o problema que resolve, (b) onde está maduro, (c) por que é multi-stack.
 
 ---
 
-## Licenca
+## Licença
 
-CC BY 4.0 - veja [LICENSE](LICENSE) para detalhes.
+CC BY 4.0 — veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
-**Versao do template**: 2.0.0 — filosofia DRY (uma unica fonte de verdade para cada aspecto).
+**Versão do template**: 3.0.0 — governança e regras viram skills lazy-triggered (substituem as pastas `.agents/governance/` + `.agents/rules/`; ver ADR `2026-05-27-governance-rules-as-skills.md`).

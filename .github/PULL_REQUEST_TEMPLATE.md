@@ -40,7 +40,7 @@ Apague linhas-guia e tags HTML antes de enviar.
 - [ ] Sem escape hatch de tipos introduzido (ex: `any`/`unknown` em TS, `Any`/`cast` em Python, `interface{}`/`any` em Go, `Object` cru / raw types em Java, `dynamic` em C#)
 - [ ] Tipos exhaustivos onde aplicavel (discriminated unions / enums / sealed classes / pattern matching cobertos)
 - [ ] Testes passam local (`<comando do projeto>`)
-- [ ] Sem skip novo de teste (ou justificado com SKIP-REASON + OWNER + DEADLINE — ver `.agents/rules/03-testing.md`)
+- [ ] Sem skip novo de teste (ou justificado com SKIP-REASON + OWNER + DEADLINE — ver skill `testing-discipline`)
 - [ ] Documentacao atualizada (`update-docs` skill se mudanca significativa)
 - [ ] ADR criado/atualizado se decisao arquitetural (`context/adr/`)
 - [ ] Sem segredos, tokens ou URLs internas hardcoded
