@@ -19,9 +19,9 @@ mappings:
     - context/product/business-rules.md
   code_pattern:
     - CLAUDE.md
-    - .agents/rules/01-architecture.md
-    - .agents/rules/02-pdi.md
-    - .agents/rules/03-testing.md
+    - .agents/skills/architecture-rules/SKILL.md
+    - .agents/skills/testing-discipline/SKILL.md
+    - .agents/skills/workflow-governance/SKILL.md
   setup:
     - README.md
   api:

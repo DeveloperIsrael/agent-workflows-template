@@ -170,5 +170,5 @@ Toda mudança na arquitetura de gates exige update aqui no mesmo PR. Considere r
 
 - [`.githooks/pre-push.example`](../../.githooks/pre-push.example) — modelo de pre-push hook
 - [`.github/workflows/ci.example.yml`](../../.github/workflows/ci.example.yml) — modelo de pipeline CI
-- [`.agents/rules/04-pre-pr-checks.md`](../../.agents/rules/04-pre-pr-checks.md) — protocolo de checks pré-PR (agente)
-- [`.agents/rules/03-testing.md`](../../.agents/rules/03-testing.md) — anti-skip + 8 vulnerabilidades obrigatórias
+- skill `pre-pr-checks` ([`.agents/skills/pre-pr-checks/SKILL.md`](../../.agents/skills/pre-pr-checks/SKILL.md)) — protocolo de checks pré-PR (agente)
+- skill `testing-discipline` ([`.agents/skills/testing-discipline/SKILL.md`](../../.agents/skills/testing-discipline/SKILL.md)) — anti-skip + 8 vulnerabilidades obrigatórias

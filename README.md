@@ -38,11 +38,11 @@ O template é dividido em **três camadas**:
 Estes são padrões maduros — não os remova achando que é redundância:
 
 - **Hierarquia de autoridade** em [`context/README.md`](./context/README.md) — define quem ganha quando dois docs discordam.
-- **Workflow task-first** em [`.agents/governance/workflow.md`](./.agents/governance/workflow.md) — task criada **antes** de tocar código.
-- **Anti-skip + 8 vulnerabilidades obrigatórias** em [`.agents/rules/03-testing.md`](./.agents/rules/03-testing.md) — vale pra qualquer runner.
-- **Pre-PR checks** em [`.agents/rules/04-pre-pr-checks.md`](./.agents/rules/04-pre-pr-checks.md) — reviewer humano não descobre PR quebrado.
+- **Workflow task-first** na skill `workflow-governance` — task criada **antes** de tocar código *(quando há tracker — é opcional; sem tracker, o branch é o registro)*.
+- **Anti-skip + 8 vulnerabilidades obrigatórias** na skill `testing-discipline` — vale pra qualquer runner.
+- **Pre-PR checks** na skill `pre-pr-checks` — reviewer humano não descobre PR quebrado.
 - **ADR como formato de decisão** em [`context/adr/`](./context/adr/) — MADR 4.0 com frontmatter.
-- **Convencional commits** em [`.agents/governance/workflow.md`](./.agents/governance/workflow.md) — `feat:`, `fix:`, `docs:`, etc.
+- **Convencional commits** na skill `workflow-governance` — `feat:`, `fix:`, `docs:`, etc.
 - **Skills universais** em [`CLAUDE.md`](./CLAUDE.md) — `clean-architecture`, `clean-code`, `update-docs`, `git-commit`, `adr-skill`, etc.
 
 > Se um princípio aqui não faz sentido pro seu projeto, abra um ADR no seu repo registrando a divergência. Não delete silenciosamente.
@@ -69,13 +69,13 @@ Marque conforme for completando. Cada linha aponta pro arquivo que você abre:
        - context/architecture/technical-specs.md — contratos técnicos específicos
 
 [ ] 4. Adaptar pre-PR checks ao seu build system
-       - .agents/rules/04-pre-pr-checks.md — substituir [COMANDO_LINT], [COMANDO_TYPECHECK],
-                                              [COMANDO_TESTS], [COMANDO_BUILD] pelos comandos reais
-       - .agents/governance/workflow.md — mesmos placeholders na Fase 5
+       - .agents/skills/pre-pr-checks/SKILL.md — substituir [COMANDO_LINT], [COMANDO_TYPECHECK],
+                                                  [COMANDO_TESTS], [COMANDO_BUILD] pelos comandos reais
 
-[ ] 5. Configurar tracker e workflow
-       - .agents/governance/workflow.md — escolher ferramenta (ClickUp/Linear/Jira/GitHub Projects)
-                                          e ajustar a tabela de status
+[ ] 5. Configurar tracker e workflow (OPCIONAL — pule se não usa tracker)
+       - .agents/skills/workflow-governance/SKILL.md — escolher ferramenta (ClickUp/Linear/Jira/
+                                          GitHub Projects) e ajustar a tabela de status; ou remover
+                                          a seção de status se o projeto não usa gerenciador de tasks
 
 [ ] 6. Configurar MCPs (se usar)
        - cp .mcp.json.example .mcp.json
@@ -162,15 +162,17 @@ Quando ler arquivos do template, esses padrões indicam o que adaptar:
 │   ├── archive/                # Docs substituídos
 │   └── providers/              # Guias por provedor de AI
 │
-├── .agents/                    # SSoT: governança + regras + skills (cross-provider)
-│   ├── governance/workflow.md
-│   ├── rules/
-│   │   ├── README.md           # Convenção de rules
-│   │   ├── 01-architecture.md  # Padrões de arquitetura (princípios)
-│   │   ├── 02-pdi.md           # PDI, naming, error handling
-│   │   ├── 03-testing.md       # Anti-skip + 8 vulnerabilidades
-│   │   └── 04-pre-pr-checks.md # Lint/type-check/test antes do PR
-│   └── skills/                 # Skills instaladas (SSoT, exposta via symlink)
+├── .agents/                    # SSoT: skills (governança + regras + stack), cross-provider
+│   ├── skills/                 # Skills instaladas (SSoT, expostas via symlink)
+│   │   ├── workflow-governance/    # Golden rules, status, commits, PR (tracker opcional)
+│   │   ├── task-start/             # Ritual de início (tracker opcional → branch → análise)
+│   │   ├── task-flow/              # Ritual de fechamento (commit → docs → checks → tracker)
+│   │   ├── architecture-rules/     # SoC/SRP, estado, erros, tamanho, anti-patterns
+│   │   ├── testing-discipline/     # Anti-skip + 8 vulnerabilidades
+│   │   ├── pre-pr-checks/          # Lint/type-check/test/build antes do PR
+│   │   ├── codex-review/           # Segunda opinião (DB/security/refactor grande)
+│   │   └── ...                     # skills universais + stack-específicas
+│   └── update-docs.profile.yaml    # Perfil de doc-sync (opcional)
 │
 ├── .githooks/                  # Git hooks opt-in
 │   └── pre-push.example        # Modelo de pre-push (renomear para 'pre-push' e adaptar)
@@ -258,4 +260,4 @@ CC BY 4.0 — veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
-**Versão do template**: 2.1.0 — filosofia DRY + clareza pedagógica de adaptação.
+**Versão do template**: 3.0.0 — governança e regras viram skills lazy-triggered (substituem as pastas `.agents/governance/` + `.agents/rules/`; ver ADR `2026-05-27-governance-rules-as-skills.md`).

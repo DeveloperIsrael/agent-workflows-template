@@ -73,7 +73,7 @@ context/
 > Quando dois documentos discordam, o de maior autoridade vence. Codigo (migrations, schemas, configs) vence prosa. Use esta lista para decidir o que ler primeiro e o que atualizar quando uma decisao muda.
 
 1. [`../CLAUDE.md`](../CLAUDE.md) — governanca, meta-regras, leitura obrigatoria
-2. [`../.agents/rules/`](../.agents/rules/) — code standards, testing, regras stack-agnosticas
+2. [`../.agents/skills/`](../.agents/skills/) — governanca + regras de codigo como skills (`workflow-governance`, `architecture-rules`, `testing-discipline`, `pre-pr-checks`)
 3. [`adr/`](./adr/) com `status: accepted` — decisoes arquiteturais formais
 4. [`product/`](./product/) + [`domain/`](./domain/) — escopo, regras de negocio, modelo de dominio
 5. [`architecture/`](./architecture/) — contratos tecnicos (API, DB, plataforma)

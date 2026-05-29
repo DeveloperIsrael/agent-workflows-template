@@ -29,7 +29,7 @@ O template adota tres principios para artefatos especificos de stack:
 
 2. **Hooks como `examples/` opt-in**: hooks de quality gate (Biome, tsc, ESLint, Ruff, MyPy) **nao vao ativos** em `.claude/settings.json`. Vivem em `.claude/hooks/examples/` com README explicando como copiar e ativar para a stack do projeto. Inclui variantes JS (Biome, ESLint+Prettier) e Python (Ruff, MyPy).
 
-3. **Rules em principios, nao tooling**: `.agents/rules/03-testing.md` (anti-skip, 8 vulnerability classes, fixture deterministico) usa pseudo-codigo. Nao cita Vitest/Jest/Pytest/RSpec por nome. O leitor adapta a sintaxe ao runner da sua stack.
+3. **Rules em principios, nao tooling**: a skill `testing-discipline` (anti-skip, 8 vulnerability classes, fixture deterministico) usa pseudo-codigo. Nao cita Vitest/Jest/Pytest/RSpec por nome. O leitor adapta a sintaxe ao runner da sua stack. *(Em 2026-05-27 as rules viraram skills — ver ADR `2026-05-27-governance-rules-as-skills.md`.)*
 
 ## Consequencias
 
@@ -68,4 +68,4 @@ Excluir TypeScript/Playwright/etc do template, deixar so skills que rodam em qua
 
 - `[NOME_DO_PROJETO]/.claude/hooks/README.md` — convencao opt-in dos hooks
 - `[NOME_DO_PROJETO]/.agents/skills/` — skills instaladas (lazy-triggered)
-- `[NOME_DO_PROJETO]/.agents/rules/03-testing.md` — exemplo de rule stack-agnostica
+- `[NOME_DO_PROJETO]/.agents/skills/testing-discipline/SKILL.md` — exemplo de regra stack-agnostica (skill)
