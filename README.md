@@ -167,12 +167,19 @@ Quando ler arquivos do template, esses padrões indicam o que adaptar:
 │   │   ├── workflow-governance/    # Golden rules, status, commits, PR (tracker opcional)
 │   │   ├── task-start/             # Ritual de início (tracker opcional → branch → análise)
 │   │   ├── task-flow/              # Ritual de fechamento (commit → docs → checks → tracker)
+│   │   ├── sdd-spec/               # Spec-driven: cria pacote .specs/<slug>/ antes de codar
+│   │   ├── sdd-execute/            # Executa pacote aprovado (write scope/forbidden files)
+│   │   ├── sdd-review/             # Revisão read-only contra o pacote/diff/PR
 │   │   ├── architecture-rules/     # SoC/SRP, estado, erros, tamanho, anti-patterns
 │   │   ├── testing-discipline/     # Anti-skip + 8 vulnerabilidades
 │   │   ├── pre-pr-checks/          # Lint/type-check/test/build antes do PR
 │   │   ├── codex-review/           # Segunda opinião (DB/security/refactor grande)
 │   │   └── ...                     # skills universais + stack-específicas
 │   └── update-docs.profile.yaml    # Perfil de doc-sync (opcional)
+│
+├── .specs/                     # Pacotes spec-driven (SDD)
+│   ├── _template/              # Skeletons copiáveis (SPEC/TECHNICAL_DESIGN/EXECUTION_PLAN/AGENT_TASKS)
+│   └── README.md              # Contrato dos pacotes + lifecycle de approval
 │
 ├── .githooks/                  # Git hooks opt-in
 │   └── pre-push.example        # Modelo de pre-push (renomear para 'pre-push' e adaptar)
@@ -184,6 +191,10 @@ Quando ler arquivos do template, esses padrões indicam o que adaptar:
 │   └── copilot-instructions.md
 │
 ├── .claude/                    # Configurações Claude Code
+│   ├── settings.json           # Permissões + env (sem hook ativo por padrão)
+│   ├── commands/sdd/           # Comandos /sdd:* (spec-driven: start/spec/execute/review/close/doctor)
+│   ├── skills/                 # Symlinks → ../../.agents/skills/
+│   └── hooks/examples/         # Hooks opt-in por stack (nenhum ativo por padrão)
 ├── .gemini/                    # Configurações Gemini
 ├── .cursor/                    # Configurações Cursor
 ├── .codex/                     # Configurações Codex (OpenAI)
@@ -260,4 +271,4 @@ CC BY 4.0 — veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
-**Versão do template**: 3.0.0 — governança e regras viram skills lazy-triggered (substituem as pastas `.agents/governance/` + `.agents/rules/`; ver ADR `2026-05-27-governance-rules-as-skills.md`).
+**Versão do template**: 4.0.0 — workflow Spec-Driven Development (`/sdd:*` + pacotes `.specs/`) substitui o framework GSD; ver ADR `2026-05-28-adopt-sdd-remove-gsd.md`. (3.0.0: governança e regras viram skills lazy-triggered — ADR `2026-05-27-governance-rules-as-skills.md`.)

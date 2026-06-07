@@ -46,10 +46,10 @@ projeto/
 │   └── skills/                     # Skills reais (todos os providers leem daqui via AGENTS.md)
 │
 ├── .claude/
-│   ├── settings.json               # Permissoes, env vars, hooks
+│   ├── settings.json               # Permissoes + env (sem hook ativo por padrao)
 │   ├── skills/                     # Symlinks → ../../.agents/skills/
-│   ├── hooks/                      # Hooks ativos + examples/ opt-in
-│   └── commands/, agents/, ...     # GSD framework
+│   ├── hooks/examples/             # Hooks opt-in (nenhum ativo por padrao)
+│   └── commands/sdd/               # Comandos /sdd:* (spec-driven development)
 │
 ├── .agents/                         # Governance + rules (cross-provider)
 │   ├── governance/workflow.md
